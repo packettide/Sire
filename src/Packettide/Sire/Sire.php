@@ -24,6 +24,12 @@ class Sire {
 		$this->migrationTemplate = file_get_contents(__DIR__.'/templates/migration.mustache');
 		$this->modelTemplate = file_get_contents(__DIR__.'/templates/model.mustache');
 		$this->controllerTemplate = file_get_contents(__DIR__.'/templates/controller.mustache');
+		$this->viewTemplates = array(
+				"create.blade.php" => file_get_contents(__DIR__.'/templates/views/create.mustache'),
+				"edit.blade.php" => file_get_contents(__DIR__.'/templates/views/edit.mustache'),
+				"index.blade.php" => file_get_contents(__DIR__.'/templates/views/index.mustache'),
+				"layout.blade.php" => file_get_contents(__DIR__.'/templates/views/layout.mustache'),
+			);
 		$this->mustache = new Mustache();
 	}
 
@@ -176,7 +182,7 @@ class Sire {
 	public function generateViews()
 	{
 		$path = app_path() . '/views/'.$this->names.'/';
-		$names = array('create.php', 'edit.php', 'index.php');
+		$names = array('create.blade.php', 'edit.blade.php', 'index.blade.php');
 		$headings = array_keys($this->fields);
 		$headings = array_map(function ($el) {
 			return array("heading" => $el);
@@ -193,6 +199,7 @@ class Sire {
 		foreach ($names as $name) {
 			file_put_contents($path.$name, $this->mustache->render($this->viewTemplates[$name], $toTemplate));
 		}
+		file_put_contents(app_path() . '/views/layouts/layout.blade.php', $this->mustache->render($this->viewTemplates['layout.blade.php'], $toTemplate));
 	}
 
 }
