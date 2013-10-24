@@ -39,7 +39,8 @@ class SireCmd extends Command {
 	 */
 	public function fire()
 	{
-		new Sire($this->argument('name'), $this->argument('yaml'));
+		$sire = new Sire($this->argument('yaml'));
+		$sire->run();
 	}
 
 	/**

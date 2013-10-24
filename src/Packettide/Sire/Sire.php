@@ -3,6 +3,7 @@ namespace Packettide\Sire;
 
 use Illuminate\Support\Pluralizer;
 use Symfony\Component\Yaml\Yaml;
+use Mustache_Engine as Mustache;
 
 class Sire {
 
@@ -11,15 +12,23 @@ class Sire {
 	protected $Name; 
 	protected $Names;
 	protected $fields = array();
+	protected $file;
+
+	// Templates
+	protected $migrationTemplate = file_get_contents(__DIR__.'/templates/migration.mustache');
 
 	public function __construct($yamlFileLocation)
 	{
 		$this->getYaml($yamlFileLocation);
 		$this->setupNames();
-		var_dump($this);
+		$this->mustache = new Mustache();
 	}
 
-	private getYaml($yamlFileLocation)
+	public function run() {
+		$this->generateMigration();
+	}
+
+	private function getYaml($yamlFileLocation)
 	{
 		$fields = file_get_contents($yamlFileLocation);
         $fields = Yaml::parse($fields);
@@ -29,16 +38,17 @@ class Sire {
         	// This is a *special field like name
         	if(strpos($key, '_') === 0)
         	{
-        		$this->${ltrim($key, '_')} = $value;
+        		$this->{ltrim($key, '_')} = $value;
         	}
         	else
         	{
         		$this->fields[$key] = $value;
+        		$this->fields[$key]['_name'] = $value;
         	}
         }
 	}
 
-	private setupNames() 
+	private function setupNames() 
 	{
 		if(!isset($this->name)) 
 		{
@@ -52,13 +62,24 @@ class Sire {
 
 		if(!isset($this->names))
 		{
-			$this->Name = Pluralizer::plural($this->name);
+			$this->names = Pluralizer::plural($this->name);
 		}
 
 		if(!isset($this->Names))
 		{
-			$this->Name = ucwords($this->name);
+			$this->Names = ucwords($this->names);
 		}
+	}
+
+	public function generateMigration()
+	{
+		$toTemplate = array(
+			"name" => $this->name,
+			"tableName" => $this->name,
+			"fields" => $this->fields,
+			)
+
+		var_dump($this->mustache->render($migrationTemplate, $toTemplate));
 	}
 
 }
