@@ -22,11 +22,8 @@
     },
     "autoload": {
         "psr-0": {
-            "Packettide\\Generators": "src/"
-        },
-        "classmap": [
-            "src/Packettide/Generators/Generators"
-        ]
+            "Packettide\\Sire": "src/"
+        }
     },
      "extra": {
         "branch-alias": {
