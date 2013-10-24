@@ -29,6 +29,7 @@ class Sire {
 	public function run() {
 		$this->generateMigration();
 		$this->generateModel();
+		$this->generateController();
 	}
 
 	private function getYaml($yamlFileLocation)
@@ -151,6 +152,21 @@ class Sire {
 			"rules" => $this->getRules(),
 			"relationships" => $relationships,
 			"breeFields" => $fields,
+			);
+
+		file_put_contents($path.$name, $this->mustache->render($this->modelTemplate, $toTemplate));
+	}
+
+	public function generateController()
+	{
+		$path = app_path() . '/controllers/';
+		$name = $this->Names.'Controller.php';
+
+		$toTemplate = array(
+			"name" => $this->name,
+			"Name" => $this->Name,
+			"names" => $this->names,
+			"Names" => $this->Names,
 			);
 
 		file_put_contents($path.$name, $this->mustache->render($this->modelTemplate, $toTemplate));
