@@ -37,6 +37,7 @@ class Sire {
 		$this->generateMigration();
 		$this->generateModel();
 		$this->generateController();
+		$this->generateViews();
 	}
 
 	private function getYaml($yamlFileLocation)
@@ -137,8 +138,8 @@ class Sire {
 		$name = date('Y_m_d_His') . '_create_' . $this->names . '_table.php';
 
 		$toTemplate = array(
-			"name" => $this->name,
-			"tableName" => $this->name,
+			"Name" => $this->Name,
+			"tableName" => $this->names,
 			"fields" => $fields,
 			);
 
@@ -197,7 +198,13 @@ class Sire {
 			);
 
 		foreach ($names as $name) {
+			if (!is_dir($path)) {
+			  mkdir($path);
+			}
 			file_put_contents($path.$name, $this->mustache->render($this->viewTemplates[$name], $toTemplate));
+		}
+		if (!is_dir(app_path() . '/views/layouts/')) {
+		  mkdir(app_path() . '/views/layouts/');
 		}
 		file_put_contents(app_path() . '/views/layouts/layout.blade.php', $this->mustache->render($this->viewTemplates['layout.blade.php'], $toTemplate));
 	}
