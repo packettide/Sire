@@ -99,7 +99,7 @@ class Sire {
 			}
 		}
 
-		return $toReturn
+		return $toReturn;
 	}
 
 	private function getRules()
@@ -110,12 +110,14 @@ class Sire {
 			if (isset($value['validation']))
 			{
 				$rule = array(
-					"_name" => $key
+					"_name" => $key,
 					"rules" => implode("|", $value['validation'])
 					);
 				array_push($toReturn, $rule);
 			}
 		}
+
+		return $toReturn;
 	}
 
 	public function generateMigration()
