@@ -28,12 +28,9 @@ class SireServiceProvider extends ServiceProvider {
          */
         public function register()
         {
-
-                // $this->app->booting(function()
-                // {
-                //         $loader = \Illuminate\Foundation\AliasLoader::getInstance();
-                //         $loader->alias('Sire', 'Packettide\Sire\Sire');
-                // });
+                $this->commands(
+                        '\Packettide\Sire\SireCmd'
+                );
         }
 
         /**

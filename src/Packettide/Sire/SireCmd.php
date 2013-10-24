@@ -20,7 +20,7 @@ class SireCmd extends Command {
 	 *
 	 * @var string
 	 */
-	protected $description = 'Command description.';
+	protected $description = 'Excellent generation';
 
 	/**
 	 * Create a new command instance.
@@ -50,8 +50,7 @@ class SireCmd extends Command {
 	protected function getArguments()
 	{
 		return array(
-			array('name', InputArgument::REQUIRED, 'An example argument.'),
-			array('yaml', InputArgument::REQUIRED, 'An example argument.'),
+			array('yaml', InputArgument::REQUIRED, 'The location of the yaml file describing your model.'),
 		);
 	}
 
