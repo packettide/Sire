@@ -1,0 +1,29 @@
+<?php
+
+class {{ Name }} extends Eloquent {
+	protected $guarded = array();
+
+	public static $rules = array(
+	{{#rules}}
+		"{{ _name }}" => "{{ rules }}"
+	{{/rules}}
+		);
+
+	public $breeFields = array(
+	{{#breeFields}}
+		{{# related }}
+			'{{ _name }}'  => array('type' => '{{ type }}', 'label' => '{{ label }}', 'select' => {{# select }}true{{/ select }}{{^ select }}false{{/ select}}, 'related' => '{{ related }}', 'title' => '{{ title }}'),
+		{{/ related}}
+		{{^ related }}
+			'{{ _name }}'  => array('type' => '{{ type }}', 'label' => '{{ label }}'),
+		{{/ related}}
+	{{/breeFields}}
+	);
+{{#relationships}}
+
+	public function {{ name }}()
+	{
+	    return $this->{{ type }}('{{ model }}');
+	}
+{{/relationships}}
+}

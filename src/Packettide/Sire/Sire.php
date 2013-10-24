@@ -22,6 +22,7 @@ class Sire {
 		$this->getYaml($yamlFileLocation);
 		$this->setupNames();
 		$this->migrationTemplate = file_get_contents(__DIR__.'/templates/migration.mustache');
+		$this->modelTemplate = file_get_contents(__DIR__.'/templates/model.mustache');
 		$this->mustache = new Mustache();
 	}
 
@@ -84,13 +85,29 @@ class Sire {
 		return $fields;
 	}
 
+	private function pluckWith($needle, $haystack, $with)
+	{
+		$toReturn = array();
+
+		foreach ($haystack as $subHaystack)
+		{
+			foreach ($subHaystack as $key => $value) {
+				if ($key === $needle) 
+				{
+					$value[$with] = $subHaystack[$with];
+					array_push($toReturn, $value);
+				}
+			}
+		}
+	}
+
 	public function generateMigration()
 	{
 
-		$fields = assocToNumeric($this->fields);
+		$fields = $this->assocToNumeric($this->fields);
 
-		$path = app_path() . '/database/migrations';
-		$name = date('Y_m_d_His').'_create_' . $this->models . '_table';
+		$path = app_path() . '/database/migrations/';
+		$name = date('Y_m_d_His') . '_create_' . $this->names . '_table.php';
 
 		$toTemplate = array(
 			"name" => $this->name,
@@ -99,6 +116,24 @@ class Sire {
 			);
 
 		file_put_contents($path.$name, $this->mustache->render($this->migrationTemplate, $toTemplate));
+	}
+
+	public function generateModel()
+	{
+
+		$fields = $this->pluckWith('bree', $this->fields, '_name');
+
+		$path = app_path() . '/models/';
+		$name = $this->Name.'.php';
+
+		$toTemplate = array(
+			"Name" => $this->Name,
+			"rules" => array(),
+			"relationships" => array(),
+			"breeFields" => $fields,
+			);
+
+		file_put_contents($path.$name, $this->mustache->render($this->modelTemplate, $toTemplate));
 	}
 
 }
