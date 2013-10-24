@@ -15,12 +15,13 @@ class Sire {
 	protected $file;
 
 	// Templates
-	protected $migrationTemplate = file_get_contents(__DIR__.'/templates/migration.mustache');
+	protected $migrationTemplate;
 
 	public function __construct($yamlFileLocation)
 	{
 		$this->getYaml($yamlFileLocation);
 		$this->setupNames();
+		$this->migrationTemplate = file_get_contents(__DIR__.'/templates/migration.mustache');
 		$this->mustache = new Mustache();
 	}
 
@@ -43,7 +44,7 @@ class Sire {
         	else
         	{
         		$this->fields[$key] = $value;
-        		$this->fields[$key]['_name'] = $value;
+        		$this->fields[$key]['_name'] = $key;
         	}
         }
 	}
@@ -71,15 +72,33 @@ class Sire {
 		}
 	}
 
+
+	private function assocToNumeric() 
+	{
+		$fields = array();
+
+		foreach ($this->fields as $value) {
+			array_push($fields, $value);
+		}
+
+		return $fields;
+	}
+
 	public function generateMigration()
 	{
+
+		$fields = assocToNumeric($this->fields);
+
+		$path = app_path() . '/database/migrations';
+		$name = date('Y_m_d_His').'_create_' . $this->models . '_table';
+
 		$toTemplate = array(
 			"name" => $this->name,
 			"tableName" => $this->name,
-			"fields" => $this->fields,
-			)
+			"fields" => $fields,
+			);
 
-		var_dump($this->mustache->render($migrationTemplate, $toTemplate));
+		file_put_contents($path.$name, $this->mustache->render($this->migrationTemplate, $toTemplate));
 	}
 
 }
