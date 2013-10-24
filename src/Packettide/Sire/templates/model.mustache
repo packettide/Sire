@@ -10,14 +10,14 @@ class {{ Name }} extends Eloquent {
 		);
 
 	public $breeFields = array(
-	{{#breeFields}}
-		{{# related }}
-			'{{ _name }}'  => array('type' => '{{ type }}', 'label' => '{{ label }}', 'select' => {{# select }}true{{/ select }}{{^ select }}false{{/ select}}, 'related' => '{{ related }}', 'title' => '{{ title }}'),
-		{{/ related}}
-		{{^ related }}
-			'{{ _name }}'  => array('type' => '{{ type }}', 'label' => '{{ label }}'),
-		{{/ related}}
-	{{/breeFields}}
+{{#breeFields}}
+	{{# related }}
+		'{{ _name }}'  => array('type' => '{{ type }}', 'label' => '{{ label }}', 'select' => {{# select }}true{{/ select }}{{^ select }}false{{/ select}}, 'related' => '{{ related }}', 'title' => '{{ title }}'),
+	{{/ related}}
+	{{^ related }}
+		'{{ _name }}'  => array('type' => '{{ type }}', 'label' => '{{ label }}'),
+	{{/ related}}
+{{/breeFields}}
 	);
 {{#relationships}}
 

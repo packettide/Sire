@@ -28,6 +28,7 @@ class Sire {
 
 	public function run() {
 		$this->generateMigration();
+		$this->generateModel();
 	}
 
 	private function getYaml($yamlFileLocation)
@@ -91,12 +92,28 @@ class Sire {
 
 		foreach ($haystack as $subHaystack)
 		{
-			foreach ($subHaystack as $key => $value) {
-				if ($key === $needle) 
-				{
-					$value[$with] = $subHaystack[$with];
-					array_push($toReturn, $value);
-				}
+			if (isset($subHaystack[$needle])) 
+			{
+				$subHaystack[$needle][$with] = $subHaystack[$with];
+				array_push($toReturn, $subHaystack[$needle]);
+			}
+		}
+
+		return $toReturn
+	}
+
+	private function getRules()
+	{
+		$toReturn = array();
+
+		foreach ($this->fields as $key => $value) {
+			if (isset($value['validation']))
+			{
+				$rule = array(
+					"_name" => $key
+					"rules" => implode("|", $value['validation'])
+					);
+				array_push($toReturn, $rule);
 			}
 		}
 	}
@@ -122,14 +139,15 @@ class Sire {
 	{
 
 		$fields = $this->pluckWith('bree', $this->fields, '_name');
+		$relationships = $this->pluckWith('relationships', $this->fields, '_name');
 
 		$path = app_path() . '/models/';
 		$name = $this->Name.'.php';
 
 		$toTemplate = array(
 			"Name" => $this->Name,
-			"rules" => array(),
-			"relationships" => array(),
+			"rules" => $this->getRules(),
+			"relationships" => $relationships,
 			"breeFields" => $fields,
 			);
 
