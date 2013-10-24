@@ -173,4 +173,26 @@ class Sire {
 		file_put_contents($path.$name, $this->mustache->render($this->controllerTemplate, $toTemplate));
 	}
 
+	public function generateViews()
+	{
+		$path = app_path() . '/views/'.$this->names.'/';
+		$names = array('create.php', 'edit.php', 'index.php');
+		$headings = array_keys($this->fields);
+		$headings = array_map(function ($el) {
+			return array("heading" => $el);
+		}, $headings);
+
+		$toTemplate = array(
+			"name" => $this->name,
+			"Name" => $this->Name,
+			"names" => $this->names,
+			"Names" => $this->Names,
+			"headings" => $headings,
+			);
+
+		foreach ($names as $name) {
+			file_put_contents($path.$name, $this->mustache->render($this->viewTemplates[$name], $toTemplate));
+		}
+	}
+
 }

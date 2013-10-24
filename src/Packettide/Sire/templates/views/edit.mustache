@@ -1,0 +1,33 @@
+@extends('layouts.scaffold')
+
+@section('main')
+
+{{! We don't want to mess with Blade }}
+{{=((( )))=}}
+
+<h1>Edit ((( Name )))</h1>
+{{ Form::open(['route' => array('((( names ))).update', $admin->id), 'method' => 'PATCH', 'role' => 'form', 'class' => 'form-horizontal']) }}
+		@foreach($admin->fields as $field_name => $field)
+	        <div class="form-group">
+	            {{ $admin->$field_name->label(array('class' => 'col-lg-2 control-label')) }} 
+				<div class="col-lg-6">
+	            	{{ $admin->$field_name->field(array('class' => 'col-lg-2 control-label')) }}
+				</div>
+	        </div>
+        @endforeach
+		<div class="form-group">
+			<div class="col-lg-6 col-lg-offset-2">	
+				{{ Form::submit('Update', array('class' => 'btn btn-success')) }}
+				{{ link_to_route('((( names ))).index', 'Cancel', array(), array('class' => 'btn btn-danger')) }}
+			</div>
+		</div>
+	
+{{ Form::close() }}
+
+@if ($errors->any())
+	<ul>
+		{{ implode('', $errors->all('<li class="error">:message</li>')) }}
+	</ul>
+@endif
+
+@stop
