@@ -23,6 +23,7 @@ class Sire {
 		$this->setupNames();
 		$this->migrationTemplate = file_get_contents(__DIR__.'/templates/migration.mustache');
 		$this->modelTemplate = file_get_contents(__DIR__.'/templates/model.mustache');
+		$this->controllerTemplate = file_get_contents(__DIR__.'/templates/controller.mustache');
 		$this->mustache = new Mustache();
 	}
 
@@ -169,7 +170,7 @@ class Sire {
 			"Names" => $this->Names,
 			);
 
-		file_put_contents($path.$name, $this->mustache->render($this->modelTemplate, $toTemplate));
+		file_put_contents($path.$name, $this->mustache->render($this->controllerTemplate, $toTemplate));
 	}
 
 }
