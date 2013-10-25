@@ -7,10 +7,7 @@ use Mustache_Engine as Mustache;
 
 class Sire {
 
-	protected $name; 
-	protected $names; 
-	protected $Name; 
-	protected $Names;
+	protected $name;
 	protected $fields = array();
 	protected $file;
 
@@ -67,41 +64,26 @@ class Sire {
 		{
 			throw new \InvalidArgumentException('At minimum you must specify _name');
 		}
-
-		if(!isset($this->Name))
+		else
 		{
-			$this->Name = \Str::studly($this->name);
+			$this->name = new Name($this->name);
 		}
+	}
 
-		if(!isset($this->names))
-		{
-			$this->names = Pluralizer::plural($this->name);
-		}
+	private function augmentArray($array)
+	{
+		$baseData = array(
+			"name" => $this->name,
+			"Name" => $this->name->upper,
+			"names" => $this->name->plural,
+			"Names" => $this->name->pluralUpper,
+			"nameLiterate" => $this->name->literate,
+			"NameLiterate" => $this->name->literateUpper,
+			"namesLiterate" => $this->name->pluralLiterate,
+			"NamesLiterate" => $this->name->pluralLiterateUpper,
+			);
 
-		if(!isset($this->Names))
-		{
-			$this->Names = \Str::studly($this->names);
-		}
-
-		if(!isset($this->nameLiterate)) 
-		{
-			$this->nameLiterate = str_replace("_", " ", $this->name);
-		}
-
-		if(!isset($this->NameLiterate))
-		{
-			$this->NameLiterate = ucwords($this->nameLiterate);
-		}
-
-		if(!isset($this->namesLiterate))
-		{
-			$this->namesLiterate = Pluralizer::plural($this->nameLiterate);
-		}
-
-		if(!isset($this->NamesLiterate))
-		{
-			$this->NamesLiterate = ucwords($this->namesLiterate);
-		}
+		return array_merge($array, $baseData);
 	}
 
 
@@ -159,12 +141,11 @@ class Sire {
 		$name = date('Y_m_d_His') . '_create_' . $this->names . '_table.php';
 
 		$toTemplate = array(
-			"Names" => $this->Names,
-			"tableName" => $this->names,
+			"tableName" => $this->name->plural,
 			"fields" => $fields,
 			);
 
-		file_put_contents($path.$name, $this->mustache->render($this->migrationTemplate, $toTemplate));
+		file_put_contents($path.$name, $this->mustache->render($this->migrationTemplate, $this->augmentArray($toTemplate)));
 	}
 
 	public function generateModel()
@@ -177,13 +158,12 @@ class Sire {
 		$name = $this->Name.'.php';
 
 		$toTemplate = array(
-			"Name" => $this->Name,
 			"rules" => $this->getRules(),
 			"relationships" => $relationships,
 			"breeFields" => $fields,
 			);
 
-		file_put_contents($path.$name, $this->mustache->render($this->modelTemplate, $toTemplate));
+		file_put_contents($path.$name, $this->mustache->render($this->modelTemplate, $this->augmentArray($toTemplate)));
 	}
 
 	public function generateController()
@@ -192,13 +172,9 @@ class Sire {
 		$name = $this->Names.'Controller.php';
 
 		$toTemplate = array(
-			"name" => $this->name,
-			"Name" => $this->Name,
-			"names" => $this->names,
-			"Names" => $this->Names,
 			);
 
-		file_put_contents($path.$name, $this->mustache->render($this->controllerTemplate, $toTemplate));
+		file_put_contents($path.$name, $this->mustache->render($this->controllerTemplate, $this->augmentArray($toTemplate)));
 	}
 
 	public function generateViews()
@@ -210,14 +186,6 @@ class Sire {
 		}, $this->fields);
 
 		$toTemplate = array(
-			"name" => $this->name,
-			"Name" => $this->Name,
-			"names" => $this->names,
-			"Names" => $this->Names,
-			"nameLiterate" => $this->nameLiterate,
-			"NameLiterate" => $this->NameLiterate,
-			"namesLiterate" => $this->namesLiterate,
-			"NamesLiterate" => $this->NamesLiterate,
 			"headings" => $this->assocToNumeric($headings),
 			"fields" => $this->assocToNumeric($this->fields),
 			);
@@ -231,15 +199,15 @@ class Sire {
 		if (!is_dir(app_path() . '/views/layouts/')) {
 		  mkdir(app_path() . '/views/layouts/');
 		}
-		file_put_contents(app_path() . '/views/layouts/layout.blade.php', $this->mustache->render($this->viewTemplates['layout.blade.php'], $toTemplate));
+		file_put_contents(app_path() . '/views/layouts/layout.blade.php', $this->mustache->render($this->viewTemplates['layout.blade.php'], $this->augmentArray($toTemplate)));
 	}
 
 	public function updateRoutesFile($name)
     {
 
-		$data = "\n\nRoute::resource('" . $this->names . "', '" . ucwords($this->Names) . "Controller');"
+		$data = "\n\nRoute::resource('" . $this->name->plural . "', '" . ucwords($this->name->pluralUpper) . "Controller');";
 
-        file_put_contents(app_path() . '/routes.php', $data, FILE_APPEND)
+        file_put_contents(app_path() . '/routes.php', $data, FILE_APPEND);
     }
 
 }
