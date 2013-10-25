@@ -69,7 +69,7 @@ class Sire {
 
 		if(!isset($this->Name))
 		{
-			$this->Name = ucwords($this->name);
+			$this->Name = \Str::studly($this->name);
 		}
 
 		if(!isset($this->names))
@@ -79,7 +79,7 @@ class Sire {
 
 		if(!isset($this->Names))
 		{
-			$this->Names = ucwords($this->names);
+			$this->Names = \Str::studly($this->names);
 		}
 	}
 
@@ -138,7 +138,7 @@ class Sire {
 		$name = date('Y_m_d_His') . '_create_' . $this->names . '_table.php';
 
 		$toTemplate = array(
-			"Name" => $this->Name,
+			"Names" => $this->Names,
 			"tableName" => $this->names,
 			"fields" => $fields,
 			);
@@ -186,7 +186,7 @@ class Sire {
 		$names = array('create.blade.php', 'edit.blade.php', 'index.blade.php');
 		$headings = array_keys($this->fields);
 		$headings = array_map(function ($el) {
-			return array("heading" => $el);
+			return array("heading" => $el['bree']['label']);
 		}, $headings);
 
 		$toTemplate = array(
@@ -195,6 +195,7 @@ class Sire {
 			"names" => $this->names,
 			"Names" => $this->Names,
 			"headings" => $headings,
+			"fields" => $this->fields,
 			);
 
 		foreach ($names as $name) {
