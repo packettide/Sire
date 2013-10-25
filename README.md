@@ -16,7 +16,7 @@ Sire allows you to generate models, views, controller, and migrations based on a
 
 1. Add `"packettide/sire": "@dev"` to the require block of your `compsoer.json`
 2. Do a `composer update`
-3. Add `'Packettide\Bree\BreeServiceProvider',` to the end of your app config providers array
+3. Add `'Packettide\Sire\SireServiceProvider',` to the end of your app config providers array
 4. Setup a simple YAML file representing your model:
 
 		_name: important_item
@@ -30,7 +30,8 @@ Sire allows you to generate models, views, controller, and migrations based on a
    		        - required
 
 
-The `_name` field tells Sire what the name of the thing you are generating is. It should be a singular, snake case, name. Sire will turn that into the other formats of the name it needs, including real words.
+The `_name` field tells Sire what the name of the things (views, controller, model, table and routes) you are generating is 
+* It should be a singular, snake case, name. Sire will turn that into the other formats of the name it needs, including real words. 
 
 The `title` field is a parameter that will appear on the resulting model. It has an `sqlType` which tells the migration generator what format the column should be, see [here](http://laravel.com/docs/schema) for more info about the types availible. The `bree` field describes the how the generated forms will interact with the parameter. The `type` is the Bree fieldtype that will represent the parameter. The `label` is simply the label. The `validation` field is a list of the rules that the parameter should obey. That title amout of YAML is enough to get you started with Sire.
 
