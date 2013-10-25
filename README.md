@@ -16,7 +16,7 @@ Sire allows you to generate models, views, controller, and migrations based on a
 
 1. Add `"packettide/sire": "@dev"` to the require block of your `compsoer.json`
 2. Do a `composer update`
-3. Add `'Packettide\Bree\BreeServiceProvider',` to the end of your app config providers array
+3. Add `'Packettide\Sire\SireServiceProvider',` to the end of your app config providers array
 4. Setup a simple YAML file representing your model:
 
 		_name: important_item
