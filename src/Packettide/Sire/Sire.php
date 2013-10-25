@@ -38,6 +38,7 @@ class Sire {
 		$this->generateModel();
 		$this->generateController();
 		$this->generateViews();
+		$this->updateRoutesFile();
 	}
 
 	private function getYaml($yamlFileLocation)
@@ -232,5 +233,13 @@ class Sire {
 		}
 		file_put_contents(app_path() . '/views/layouts/layout.blade.php', $this->mustache->render($this->viewTemplates['layout.blade.php'], $toTemplate));
 	}
+
+	public function updateRoutesFile($name)
+    {
+
+		$data = "\n\nRoute::resource('" . $this->names . "', '" . ucwords($this->Names) . "Controller');"
+
+        file_put_contents(app_path() . '/routes.php', $data, FILE_APPEND)
+    }
 
 }
