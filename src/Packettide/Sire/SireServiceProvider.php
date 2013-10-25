@@ -1,6 +1,7 @@
 <?php namespace Packettide\Sire;
 
 use Illuminate\Support\ServiceProvider;
+use Mustache_Engine as Mustache;
 
 class SireServiceProvider extends ServiceProvider {
 
@@ -30,7 +31,7 @@ class SireServiceProvider extends ServiceProvider {
     {
 		$this->app['mustache'] = $this->app->share(function($app)
 		{
-			return new Mustache_Engine();
+			return new Mustache();
 		});
 
 		$this->app['templater'] = $this->app->share(function($app)
@@ -44,7 +45,7 @@ class SireServiceProvider extends ServiceProvider {
 		});
 
         $this->commands(
-            $this->app['sire']
+            'Packettide\Sire\SireCmd'
         );
     }
 

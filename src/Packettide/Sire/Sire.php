@@ -16,7 +16,7 @@ class Sire {
 	public function __construct(Mustache $mustache, Templater $templater)
 	{
 		$this->mustache = $mustache;
-		$this->$templater = $templater;
+		$this->templater = $templater;
 	}
 
 	public function with($yamlFileLocation)
@@ -142,6 +142,11 @@ class Sire {
 
 		$fields = $this->pluckWith('bree', $this->fields, '_name');
 		$relationships = $this->pluckWith('relationships', $this->fields, '_name');
+
+		$relationships = array_map(function ($el) {
+			$el['name'] = \Str::camel($el['name']);
+			return $el;
+		}, $relationships);
 
 		$path = app_path() . '/models/';
 		$name = $this->name->upper().'.php';

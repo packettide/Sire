@@ -10,10 +10,10 @@ class Templater
 	
 	function __construct(Mustache $mustache)
 	{
-
+		$this->mustache = $mustache;
 	}
 
-	private function with(Name $name)
+	public function with(Name $name)
 	{
 		$this->name = $name;
 	}

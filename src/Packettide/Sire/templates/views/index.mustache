@@ -31,9 +31,16 @@
 			@foreach ( $((( names ))) as $((( name ))) )
 				<tr>
 				(((# fields )))
+					(((# realField )))
+					<td>
+						{{ $((( name )))->((( field )))->((( title ))) }}
+					</td>
+					(((/ realField )))
+					(((^ realField )))
 					<td>
 						{{ $((( name )))->(((_name))) }}
 					</td>
+					(((/ realField )))
 				(((/ fields )))
 					<td>
 						{{ link_to_route('((( names ))).edit', 'Edit', array($((( name )))->id), array('class' => 'btn btn-info')) }}
