@@ -5,11 +5,11 @@
 {{! We don't want to mess with Blade }}
 {{=((( )))=}}
 
-<h1>All ((( Names )))</h1>
+<h1>All ((( NamesLiterate )))</h1>
 
 <p>
 	<a href="((( names )))/create" class="btn btn-success"><i class="glyphicon-plus"></i> 
-	Add new ((( name )))</a>
+	Add new ((( nameLiterate )))</a>
 </p>
 
 @if ( $((( names )))->count() )
@@ -48,7 +48,7 @@
 		</tbody>
 	</table>
 @else
-	There are no ((( names )))
+	There are no ((( namesLiterate )))
 @endif
 
 @stop

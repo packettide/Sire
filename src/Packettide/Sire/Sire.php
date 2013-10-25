@@ -81,6 +81,26 @@ class Sire {
 		{
 			$this->Names = \Str::studly($this->names);
 		}
+
+		if(!isset($this->nameLiterate)) 
+		{
+			$this->nameLiterate = str_replace("_", " ", $this->name);
+		}
+
+		if(!isset($this->NameLiterate))
+		{
+			$this->NameLiterate = ucwords($this->nameLiterate);
+		}
+
+		if(!isset($this->namesLiterate))
+		{
+			$this->namesLiterate = Pluralizer::plural($this->nameLiterate);
+		}
+
+		if(!isset($this->NamesLiterate))
+		{
+			$this->NamesLiterate = ucwords($this->namesLiterate);
+		}
 	}
 
 
@@ -193,6 +213,10 @@ class Sire {
 			"Name" => $this->Name,
 			"names" => $this->names,
 			"Names" => $this->Names,
+			"nameLiterate" => $this->nameLiterate,
+			"NameLiterate" => $this->NameLiterate,
+			"namesLiterate" => $this->namesLiterate,
+			"NamesLiterate" => $this->NamesLiterate,
 			"headings" => $this->assocToNumeric($headings),
 			"fields" => $this->assocToNumeric($this->fields),
 			);
