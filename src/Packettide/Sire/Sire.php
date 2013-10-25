@@ -13,7 +13,13 @@ class Sire {
 	// Templates
 	protected $migrationTemplate;
 
-	public function __construct($yamlFileLocation)
+	public function __construct(Mustache $mustache, Templater $templater)
+	{
+		$this->mustache = $mustache;
+		$this->$templater = $templater;
+	}
+
+	public function with($yamlFileLocation)
 	{
 		$this->getYaml($yamlFileLocation);
 		$this->setupNames();
@@ -26,7 +32,7 @@ class Sire {
 				"index.blade.php" => file_get_contents(__DIR__.'/templates/views/index.mustache'),
 				"layout.blade.php" => file_get_contents(__DIR__.'/templates/views/layout.mustache'),
 			);
-		$this->mustache = new Mustache();
+		return $this;
 	}
 
 	public function run() {
@@ -66,25 +72,9 @@ class Sire {
 		else
 		{
 			$this->name = new Name($this->name);
+			$this->templater->with($this->name);
 		}
 	}
-
-	private function augmentArray($array)
-	{
-		$baseData = array(
-			"name" => $this->name,
-			"Name" => $this->name->upper(),
-			"names" => $this->name->plural(),
-			"Names" => $this->name->pluralUpper(),
-			"nameLiterate" => $this->name->literate(),
-			"NameLiterate" => $this->name->literateUpper(),
-			"namesLiterate" => $this->name->pluralLiterate(),
-			"NamesLiterate" => $this->name->pluralLiterateUpper(),
-			);
-
-		return array_merge($array, $baseData);
-	}
-
 
 	private function assocToNumeric($array) 
 	{
@@ -144,7 +134,7 @@ class Sire {
 			"fields" => $fields,
 			);
 
-		file_put_contents($path.$name, $this->mustache->render($this->migrationTemplate, $this->augmentArray($toTemplate)));
+		$this->templater->template($this->migrationTemplate, $toTemplate, $path.$name);
 	}
 
 	public function generateModel()
@@ -162,7 +152,7 @@ class Sire {
 			"breeFields" => $fields,
 			);
 
-		file_put_contents($path.$name, $this->mustache->render($this->modelTemplate, $this->augmentArray($toTemplate)));
+		$this->templater->template($this->modelTemplate, $toTemplate, $path.$name);
 	}
 
 	public function generateController()
@@ -170,10 +160,9 @@ class Sire {
 		$path = app_path() . '/controllers/';
 		$name = $this->name->pluralUpper().'Controller.php';
 
-		$toTemplate = array(
-			);
+		$toTemplate = array();
 
-		file_put_contents($path.$name, $this->mustache->render($this->controllerTemplate, $this->augmentArray($toTemplate)));
+		$this->templater->template($this->controllerTemplate, $toTemplate, $path.$name);
 	}
 
 	public function generateViews()
@@ -193,12 +182,13 @@ class Sire {
 			if (!is_dir($path)) {
 			  mkdir($path);
 			}
-			file_put_contents($path.$name, $this->mustache->render($this->viewTemplates[$name], $this->augmentArray($toTemplate)));
+			$this->templater->template($this->viewTemplates[$name], $toTemplate, $path.$name);
 		}
+
 		if (!is_dir(app_path() . '/views/layouts/')) {
 		  mkdir(app_path() . '/views/layouts/');
 		}
-		file_put_contents(app_path() . '/views/layouts/layout.blade.php', $this->mustache->render($this->viewTemplates['layout.blade.php'], $this->augmentArray($toTemplate)));
+		$this->templater->template($this->viewTemplates['layout.blade.php'], $toTemplate, app_path() . '/views/layouts/layout.blade.php');
 	}
 
 	public function updateRoutesFile()

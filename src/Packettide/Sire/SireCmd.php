@@ -27,9 +27,10 @@ class SireCmd extends Command {
 	 *
 	 * @return void
 	 */
-	public function __construct()
+	public function __construct(Sire $sire)
 	{
 		parent::__construct();
+		$this->sire = $sire;
 	}
 
 	/**
@@ -39,8 +40,7 @@ class SireCmd extends Command {
 	 */
 	public function fire()
 	{
-		$sire = new Sire($this->argument('yaml'));
-		$sire->run();
+		$this->sire->with($this->argument('yaml'))->run();
 	}
 
 	/**
