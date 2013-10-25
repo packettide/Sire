@@ -1,5 +1,7 @@
 <?php namespace Packettide\Sire;
 
+use Illuminate\Support\Pluralizer;
+
 /**
 * 
 */
@@ -10,7 +12,7 @@ class Name
 
 	function __construct($name)
 	{
-		$this->name = $name->__toString();
+		$this->name = $name;
 
 		$this->generateNames();
 	}

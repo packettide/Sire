@@ -1,7 +1,6 @@
 <?php
 namespace Packettide\Sire;
 
-use Illuminate\Support\Pluralizer;
 use Symfony\Component\Yaml\Yaml;
 use Mustache_Engine as Mustache;
 
@@ -74,13 +73,13 @@ class Sire {
 	{
 		$baseData = array(
 			"name" => $this->name,
-			"Name" => $this->name->upper,
-			"names" => $this->name->plural,
-			"Names" => $this->name->pluralUpper,
-			"nameLiterate" => $this->name->literate,
-			"NameLiterate" => $this->name->literateUpper,
-			"namesLiterate" => $this->name->pluralLiterate,
-			"NamesLiterate" => $this->name->pluralLiterateUpper,
+			"Name" => $this->name->upper(),
+			"names" => $this->name->plural(),
+			"Names" => $this->name->pluralUpper(),
+			"nameLiterate" => $this->name->literate(),
+			"NameLiterate" => $this->name->literateUpper(),
+			"namesLiterate" => $this->name->pluralLiterate(),
+			"NamesLiterate" => $this->name->pluralLiterateUpper(),
 			);
 
 		return array_merge($array, $baseData);
@@ -138,10 +137,10 @@ class Sire {
 		$fields = $this->assocToNumeric($this->fields);
 
 		$path = app_path() . '/database/migrations/';
-		$name = date('Y_m_d_His') . '_create_' . $this->names . '_table.php';
+		$name = date('Y_m_d_His') . '_create_' . $this->name->plural() . '_table.php';
 
 		$toTemplate = array(
-			"tableName" => $this->name->plural,
+			"tableName" => $this->name->plural(),
 			"fields" => $fields,
 			);
 
@@ -155,7 +154,7 @@ class Sire {
 		$relationships = $this->pluckWith('relationships', $this->fields, '_name');
 
 		$path = app_path() . '/models/';
-		$name = $this->Name.'.php';
+		$name = $this->name->upper().'.php';
 
 		$toTemplate = array(
 			"rules" => $this->getRules(),
@@ -169,7 +168,7 @@ class Sire {
 	public function generateController()
 	{
 		$path = app_path() . '/controllers/';
-		$name = $this->Names.'Controller.php';
+		$name = $this->name->pluralUpper().'Controller.php';
 
 		$toTemplate = array(
 			);
@@ -179,7 +178,7 @@ class Sire {
 
 	public function generateViews()
 	{
-		$path = app_path() . '/views/'.$this->names.'/';
+		$path = app_path() . '/views/'.$this->name->plural().'/';
 		$names = array('create.blade.php', 'edit.blade.php', 'index.blade.php');
 		$headings = array_map(function ($el) {
 			return array("heading" => $el['bree']['label']);
@@ -194,7 +193,7 @@ class Sire {
 			if (!is_dir($path)) {
 			  mkdir($path);
 			}
-			file_put_contents($path.$name, $this->mustache->render($this->viewTemplates[$name], $toTemplate));
+			file_put_contents($path.$name, $this->mustache->render($this->viewTemplates[$name], $this->augmentArray($toTemplate)));
 		}
 		if (!is_dir(app_path() . '/views/layouts/')) {
 		  mkdir(app_path() . '/views/layouts/');
@@ -202,10 +201,10 @@ class Sire {
 		file_put_contents(app_path() . '/views/layouts/layout.blade.php', $this->mustache->render($this->viewTemplates['layout.blade.php'], $this->augmentArray($toTemplate)));
 	}
 
-	public function updateRoutesFile($name)
+	public function updateRoutesFile()
     {
 
-		$data = "\n\nRoute::resource('" . $this->name->plural . "', '" . ucwords($this->name->pluralUpper) . "Controller');";
+		$data = "\n\nRoute::resource('" . $this->name->plural() . "', '" . ucwords($this->name->pluralUpper()) . "Controller');";
 
         file_put_contents(app_path() . '/routes.php', $data, FILE_APPEND);
     }
