@@ -84,15 +84,15 @@ class Sire {
 	}
 
 
-	private function assocToNumeric() 
+	private function assocToNumeric($array) 
 	{
-		$fields = array();
+		$newArray = array();
 
-		foreach ($this->fields as $value) {
-			array_push($fields, $value);
+		foreach ($array as $value) {
+			array_push($newArray, $value);
 		}
 
-		return $fields;
+		return $newArray;
 	}
 
 	private function pluckWith($needle, $haystack, $with)
@@ -184,18 +184,17 @@ class Sire {
 	{
 		$path = app_path() . '/views/'.$this->names.'/';
 		$names = array('create.blade.php', 'edit.blade.php', 'index.blade.php');
-		$headings = array_keys($this->fields);
 		$headings = array_map(function ($el) {
 			return array("heading" => $el['bree']['label']);
-		}, $headings);
+		}, $this->fields);
 
 		$toTemplate = array(
 			"name" => $this->name,
 			"Name" => $this->Name,
 			"names" => $this->names,
 			"Names" => $this->Names,
-			"headings" => $headings,
-			"fields" => $this->fields,
+			"headings" => $this->assocToNumeric($headings),
+			"fields" => $this->assocToNumeric($this->fields),
 			);
 
 		foreach ($names as $name) {
