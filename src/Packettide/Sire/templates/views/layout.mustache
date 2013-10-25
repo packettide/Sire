@@ -1,20 +1,23 @@
 {{! We don't want to mess with Blade }}
 {{=((( )))=}}
 
-<!doctype html>
-<html>
-	<head>
-		<meta charset="utf-8">
-		<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
-		<style>
-			table form { margin-bottom: 0; }
-			form ul { margin-left: 0; list-style: none; }
-			.error { color: red; font-style: italic; }
-			body { padding-top: 20px; }
-		</style>
-	</head>
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class=""> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<body>
+        <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
+
+    </head>
+    <body class="home">
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
 
 		<div class="container">
 			@if (Session::has('message'))
@@ -29,3 +32,4 @@
 	</body>
 
 </html>
+
