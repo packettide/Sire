@@ -2,6 +2,7 @@
 namespace Packettide\Sire;
 
 use Symfony\Component\Yaml\Yaml;
+use Patckettide\Sire\Generators\MigrationGenerator;
 use Mustache_Engine as Mustache;
 
 class Sire {
