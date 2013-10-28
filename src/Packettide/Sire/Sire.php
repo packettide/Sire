@@ -3,6 +3,7 @@ namespace Packettide\Sire;
 
 use Symfony\Component\Yaml\Yaml;
 use Packettide\Sire\Generators\MigrationGenerator;
+use Packettide\Sire\Generators\ModelGenerator;
 use Mustache_Engine as Mustache;
 
 class Sire {
@@ -14,18 +15,19 @@ class Sire {
 	// Templates
 	protected $migrationTemplate;
 
-	public function __construct(Mustache $mustache, Templater $templater, MigrationGenerator $miGen)
+	public function __construct(Mustache $mustache, Templater $templater, 
+		MigrationGenerator $miGen, ModelGenerator $mGen)
 	{
 		$this->mustache = $mustache;
 		$this->templater = $templater;
 		$this->migrationGenerator = $miGen;
+		$this->modelGenerator = $mGen;
 	}
 
 	public function with($yamlFileLocation)
 	{
 		$this->getYaml($yamlFileLocation);
 		$this->setupNames();
-		$this->modelTemplate = file_get_contents(__DIR__.'/templates/model.mustache');
 		$this->controllerTemplate = file_get_contents(__DIR__.'/templates/controller.mustache');
 		$this->viewTemplates = array(
 				"create.blade.php" => file_get_contents(__DIR__.'/templates/views/create.mustache'),
@@ -120,29 +122,6 @@ class Sire {
 		}
 
 		return $toReturn;
-	}
-
-	public function generateModel()
-	{
-
-		$fields = $this->pluckWith('bree', $this->fields, '_name');
-		$relationships = $this->pluckWith('relationships', $this->fields, '_name');
-
-		$relationships = array_map(function ($el) {
-			$el['name'] = \Str::camel($el['name']);
-			return $el;
-		}, $relationships);
-
-		$path = app_path() . '/models/';
-		$name = $this->name->upper().'.php';
-
-		$toTemplate = array(
-			"rules" => $this->getRules(),
-			"relationships" => $relationships,
-			"breeFields" => $fields,
-			);
-
-		$this->templater->template($this->modelTemplate, $toTemplate, $path.$name);
 	}
 
 	public function generateController()
