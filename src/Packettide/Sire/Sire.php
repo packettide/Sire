@@ -13,17 +13,17 @@ class Sire {
 	// Templates
 	protected $migrationTemplate;
 
-	public function __construct(Mustache $mustache, Templater $templater)
+	public function __construct(Mustache $mustache, Templater $templater, MigrationGenerator $miGen)
 	{
 		$this->mustache = $mustache;
 		$this->templater = $templater;
+		$this->migrationGenerator = $miGen;
 	}
 
 	public function with($yamlFileLocation)
 	{
 		$this->getYaml($yamlFileLocation);
 		$this->setupNames();
-		$this->migrationTemplate = file_get_contents(__DIR__.'/templates/migration.mustache');
 		$this->modelTemplate = file_get_contents(__DIR__.'/templates/model.mustache');
 		$this->controllerTemplate = file_get_contents(__DIR__.'/templates/controller.mustache');
 		$this->viewTemplates = array(
@@ -36,7 +36,7 @@ class Sire {
 	}
 
 	public function run() {
-		$this->generateMigration();
+		$this->MigrationGenerator->run($this);
 		$this->generateModel();
 		$this->generateController();
 		$this->generateViews();
@@ -119,22 +119,6 @@ class Sire {
 		}
 
 		return $toReturn;
-	}
-
-	public function generateMigration()
-	{
-
-		$fields = $this->assocToNumeric($this->fields);
-
-		$path = app_path() . '/database/migrations/';
-		$name = date('Y_m_d_His') . '_create_' . $this->name->plural() . '_table.php';
-
-		$toTemplate = array(
-			"tableName" => $this->name->plural(),
-			"fields" => $fields,
-			);
-
-		$this->templater->template($this->migrationTemplate, $toTemplate, $path.$name);
 	}
 
 	public function generateModel()

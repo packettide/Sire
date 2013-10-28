@@ -1,6 +1,7 @@
 <?php namespace Packettide\Sire;
 
 use Illuminate\Support\ServiceProvider;
+use Patckettide\Sire\Generators\MigrationGenerator;
 use Mustache_Engine as Mustache;
 
 class SireServiceProvider extends ServiceProvider {
@@ -39,9 +40,15 @@ class SireServiceProvider extends ServiceProvider {
 			return new Templater($app['mustache']);
 		});
 
+		$this->app['sire.generators.migration'] = $this->app->share(function($app)
+		{
+			return new MigrationGenerator();
+		});
+
     	$this->app['sire'] = $this->app->share(function($app)
 		{
-			return new Sire($app['mustache'], $app['templater']);
+			return new Sire($app['mustache'], $app['templater'], 
+				$app['sire.generators.migration']);
 		});
 
         $this->commands(
