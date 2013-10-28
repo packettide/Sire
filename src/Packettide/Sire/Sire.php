@@ -4,24 +4,23 @@ namespace Packettide\Sire;
 use Symfony\Component\Yaml\Yaml;
 use Packettide\Sire\Generators\MigrationGenerator;
 use Packettide\Sire\Generators\ModelGenerator;
+use Packettide\Sire\Generators\ControllerGenerator;
 use Mustache_Engine as Mustache;
 
 class Sire {
 
-	protected $name;
-	protected $fields = array();
-	protected $file;
-
-	// Templates
-	protected $migrationTemplate;
+	public $name;
+	public $fields = array();
+	public $file;
 
 	public function __construct(Mustache $mustache, Templater $templater, 
-		MigrationGenerator $miGen, ModelGenerator $mGen)
+		MigrationGenerator $miGen, ModelGenerator $mGen, ControllerGenerator $cGen)
 	{
 		$this->mustache = $mustache;
 		$this->templater = $templater;
 		$this->migrationGenerator = $miGen;
 		$this->modelGenerator = $mGen;
+		$this->controllerGenerator = $cGen;
 	}
 
 	public function with($yamlFileLocation)
@@ -41,7 +40,7 @@ class Sire {
 	public function run() {
 		$this->migrationGenerator->run($this);
 		$this->modelGenerator->run($this);
-		$this->generateController();
+		$this->controllerGenerator->run($this);
 		$this->generateViews();
 		$this->updateRoutesFile();
 	}
@@ -79,7 +78,7 @@ class Sire {
 		}
 	}
 
-	private function assocToNumeric($array) 
+	public function assocToNumeric($array) 
 	{
 		$newArray = array();
 
@@ -90,7 +89,7 @@ class Sire {
 		return $newArray;
 	}
 
-	private function pluckWith($needle, $haystack, $with)
+	public function pluckWith($needle, $haystack, $with)
 	{
 		$toReturn = array();
 
@@ -106,7 +105,7 @@ class Sire {
 		return $toReturn;
 	}
 
-	private function getRules()
+	public function getRules()
 	{
 		$toReturn = array();
 
@@ -122,16 +121,6 @@ class Sire {
 		}
 
 		return $toReturn;
-	}
-
-	public function generateController()
-	{
-		$path = app_path() . '/controllers/';
-		$name = $this->name->pluralUpper().'Controller.php';
-
-		$toTemplate = array();
-
-		$this->templater->template($this->controllerTemplate, $toTemplate, $path.$name);
 	}
 
 	public function generateViews()

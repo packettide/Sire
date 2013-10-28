@@ -5,7 +5,7 @@ class ModelGenerator {
 
 	public function __construct()
 	{
-		$this->migrationTemplate = file_get_contents(__DIR__.'/../templates/migration.mustache');
+		$this->modelTemplate = file_get_contents(__DIR__.'/../templates/migration.mustache');
 	}
 
 	public function run($sire)
