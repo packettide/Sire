@@ -31,7 +31,7 @@ class ViewGenerator
 			if (!is_dir($path)) {
 			  mkdir($path);
 			}
-			$sire->templater->template($sire->viewTemplates[$name], $toTemplate, $path.$name);
+			$sire->templater->template($this->viewTemplates[$name], $toTemplate, $path.$name);
 		}
 
 		if (!is_dir(app_path() . '/views/layouts/')) {
