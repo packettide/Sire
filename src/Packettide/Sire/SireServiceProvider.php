@@ -1,7 +1,7 @@
 <?php namespace Packettide\Sire;
 
 use Illuminate\Support\ServiceProvider;
-use Patckettide\Sire\Generators\MigrationGenerator;
+use Packettide\Sire\Generators\MigrationGenerator;
 use Mustache_Engine as Mustache;
 
 class SireServiceProvider extends ServiceProvider {
