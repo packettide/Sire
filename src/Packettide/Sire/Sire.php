@@ -39,8 +39,8 @@ class Sire {
 	}
 
 	public function run() {
-		$this->MigrationGenerator->run($this);
-		$this->generateModel();
+		$this->migrationGenerator->run($this);
+		$this->modelGenerator->run($this);
 		$this->generateController();
 		$this->generateViews();
 		$this->updateRoutesFile();
