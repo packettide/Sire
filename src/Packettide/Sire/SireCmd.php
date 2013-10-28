@@ -53,6 +53,7 @@ class SireCmd extends Command {
 		{
 			$this->sire->with($this->argument('yaml'))->run();
 		}
+		$this->call('optimize');
 	}
 
 	/**

@@ -5,6 +5,7 @@ use Packettide\Sire\Generators\MigrationGenerator;
 use Packettide\Sire\Generators\ModelGenerator;
 use Packettide\Sire\Generators\ControllerGenerator;
 use Packettide\Sire\Generators\ViewGenerator;
+use Symfony\Component\Finder\Finder;
 use Mustache_Engine as Mustache;
 
 class SireServiceProvider extends ServiceProvider {
@@ -45,7 +46,8 @@ class SireServiceProvider extends ServiceProvider {
 
 		$this->app['sire.generators.migration'] = $this->app->share(function($app)
 		{
-			return new MigrationGenerator();
+            $finder = new Finder();
+			return new MigrationGenerator($finder, $app['migrator']);
 		});
 
 		$this->app['sire.generators.model'] = $this->app->share(function($app)
@@ -73,8 +75,13 @@ class SireServiceProvider extends ServiceProvider {
 				$app['sire.generators.view']);
 		});
 
+        $this->app['sire.cmd'] = $this->app->share(function($app)
+        {
+            return new SireCmd($app['sire']);
+        });
+
         $this->commands(
-            'Packettide\Sire\SireCmd'
+            'sire.cmd'
         );
     }
 

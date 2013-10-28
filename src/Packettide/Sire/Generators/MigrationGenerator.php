@@ -2,12 +2,14 @@
 namespace Packettide\Sire\Generators;
 
 use Symfony\Component\Finder\Finder;
+use Illuminate\Database\Migrations\Migrator;
 
 class MigrationGenerator {
 
-	public function __construct(Finder $finder)
+	public function __construct(Finder $finder, Migrator $migrator)
 	{
 		$this->finder = $finder;
+		$this->migrator = $migrator;
 		$this->migrationTemplate = file_get_contents(__DIR__.'/../templates/migration.mustache');
 	}
 
@@ -17,16 +19,27 @@ class MigrationGenerator {
 
 		$path = app_path() . '/database/migrations/';
 
-		$finder->files()->in($path)->name('*_create_' . $sire->name->plural() . '_table.php');
+		$this->finder = $this->finder->create();
 
-		if(iterator_count($finder) != 0)
+		$this->finder->files()->in($path)->name('*_create_' . $sire->name->plural() . '_table.php');
+
+		if($this->finder->count() != 0)
 		{
-			$name = $finder->current()->getRelativePathname();
+			foreach ($this->finder as $file) {
+				$migrationName = explode(".php", $file->getRelativePathname());
+				if ($this->migrator->repositoryExists() && in_array($migrationName[0], $this->migrator->getRepository()->getRan()))
+				{
+					$mig = (object) array('migration' => $migrationName[0], 'batch' => 1);
+					$method = new \ReflectionMethod($this->migrator, 'runDown');
+					$method->setAccessible(true);
+
+					$method->invoke($this->migrator, $mig, false);
+				}					
+				unlink($path.$file->getRelativePathname());
+			}
 		}
-		else
-		{
-			$name = date('Y_m_d_His') . '_create_' . $sire->name->plural() . '_table.php';
-		}
+	
+		$name = date('Y_m_d_His') . '_create_' . $sire->name->plural() . '_table.php';
 
 		$toTemplate = array(
 			"tableName" => $sire->name->plural(),
