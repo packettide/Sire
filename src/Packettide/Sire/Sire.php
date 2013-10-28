@@ -30,7 +30,6 @@ class Sire {
 	{
 		$this->getYaml($yamlFileLocation);
 		$this->setupNames();
-		$this->controllerTemplate = file_get_contents(__DIR__.'/templates/controller.mustache');
 		return $this;
 	}
 

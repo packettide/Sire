@@ -5,6 +5,7 @@ namespace Packettide\Sire;
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Finder\Finder;
 
 class SireCmd extends Command {
 
@@ -40,7 +41,18 @@ class SireCmd extends Command {
 	 */
 	public function fire()
 	{
-		$this->sire->with($this->argument('yaml'))->run();
+		if (is_dir($this->argument('yaml')))
+		{
+			$finder = new Finder();
+			$finder->files()->in($this->argument('yaml'))->name("*.yaml")->name("*.yml");
+			foreach ($finder as $yaml) {
+				$this->sire->with($yaml)->run();
+			}
+		}
+		else
+		{
+			$this->sire->with($this->argument('yaml'))->run();
+		}
 	}
 
 	/**
