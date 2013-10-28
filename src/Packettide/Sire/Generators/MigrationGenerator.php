@@ -29,11 +29,18 @@ class MigrationGenerator {
 				$migrationName = explode(".php", $file->getRelativePathname());
 				if ($this->migrator->repositoryExists() && in_array($migrationName[0], $this->migrator->getRepository()->getRan()))
 				{
-					$mig = (object) array('migration' => $migrationName[0], 'batch' => 1);
-					$method = new \ReflectionMethod($this->migrator, 'runDown');
-					$method->setAccessible(true);
+					if ($sire->command->confirm("This is will down {$migrationName[0]}. Do you wish to continue? [yes|no]"))
+					{
+						$mig = (object) array('migration' => $migrationName[0], 'batch' => 1);
+						$method = new \ReflectionMethod($this->migrator, 'runDown');
+						$method->setAccessible(true);
 
-					$method->invoke($this->migrator, $mig, false);
+						$method->invoke($this->migrator, $mig, false);
+					}
+					else
+					{
+						throw new \Exception("Please resolve the conflicting migration and try again.", 1);
+					}
 				}					
 				unlink($path.$file->getRelativePathname());
 			}

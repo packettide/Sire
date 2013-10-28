@@ -41,6 +41,7 @@ class SireCmd extends Command {
 	 */
 	public function fire()
 	{
+		$this->sire->cmd($this);
 		if (is_dir($this->argument('yaml')))
 		{
 			$finder = new Finder();

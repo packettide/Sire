@@ -33,6 +33,11 @@ class Sire {
 		return $this;
 	}
 
+	public function cmd($command)
+	{
+		$this->command = $command;
+	}
+
 	public function run() {
 		$this->migrationGenerator->run($this);
 		$this->modelGenerator->run($this);
