@@ -4,6 +4,7 @@ use Illuminate\Support\ServiceProvider;
 use Packettide\Sire\Generators\MigrationGenerator;
 use Packettide\Sire\Generators\ModelGenerator;
 use Packettide\Sire\Generators\ControllerGenerator;
+use Packettide\Sire\Generators\ViewGenerator;
 use Mustache_Engine as Mustache;
 
 class SireServiceProvider extends ServiceProvider {
@@ -52,9 +53,15 @@ class SireServiceProvider extends ServiceProvider {
 			return new ModelGenerator();
 		});
 
-		$this->app['sire.generators.controller'] = $this->app->share(function($app)
+        $this->app['sire.generators.controller'] = $this->app->share(function($app)
+        {
+            return new ControllerGenerator();
+        });
+
+
+		$this->app['sire.generators.view'] = $this->app->share(function($app)
 		{
-			return new ControllerGenerator();
+			return new ViewGenerator();
 		});
 
     	$this->app['sire'] = $this->app->share(function($app)
@@ -62,7 +69,8 @@ class SireServiceProvider extends ServiceProvider {
 			return new Sire($app['mustache'], $app['templater'], 
 				$app['sire.generators.migration'], 
 				$app['sire.generators.model'], 
-				$app['sire.generators.controller']);
+                $app['sire.generators.controller'],
+				$app['sire.generators.view']);
 		});
 
         $this->commands(
