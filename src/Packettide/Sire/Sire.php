@@ -28,12 +28,7 @@ class Sire {
 
 	public function reset()
 	{
-		return new Sire($this->mustache,
-			$this->templater,
-			$this->migrationGenerator,
-			$this->modelGenerator,
-			$this->controllerGenerator,
-			$this->viewGenerator);
+		$this->fields = array();
 	}
 
 	public function with($yamlFileLocation)
