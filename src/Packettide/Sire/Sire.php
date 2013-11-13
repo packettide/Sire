@@ -26,6 +26,16 @@ class Sire {
 		$this->viewGenerator = $vGen;
 	}
 
+	public function reset()
+	{
+		return new Sire($this->mustache,
+			$this->templater,
+			$this->migrationGenerator,
+			$this->modelGenerator,
+			$this->controllerGenerator,
+			$this->viewGenerator);
+	}
+
 	public function with($yamlFileLocation)
 	{
 		$this->getYaml($yamlFileLocation);
@@ -50,6 +60,8 @@ class Sire {
 	{
 		$fields = file_get_contents($yamlFileLocation);
         $fields = Yaml::parse($fields);
+
+        $this->fields = array();
 
         foreach ($fields as $key => $value) 
         {

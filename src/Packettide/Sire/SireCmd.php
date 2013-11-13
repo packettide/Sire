@@ -47,6 +47,7 @@ class SireCmd extends Command {
 			$finder = new Finder();
 			$finder->files()->in($this->argument('yaml'))->name("*.yaml")->name("*.yml");
 			foreach ($finder as $yaml) {
+				$this->sire = $this->sire->reset();
 				$this->sire->with($yaml)->run();
 			}
 		}
