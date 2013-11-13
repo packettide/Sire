@@ -6,7 +6,10 @@
 {{=((( )))=}}
 
 <h1>Edit ((( NameLiterate )))</h1>
-{{ Form::open(['route' => array('((( names ))).update', $admin->id), 'method' => 'PATCH', 'role' => 'form', 'class' => 'form-horizontal']) }}
+
+{{ $admin->assets() }}
+
+{{ Form::open(array('route' => array('((( names ))).update', $admin->id), 'method' => 'PATCH', 'role' => 'form', 'class' => 'form-horizontal', 'file' => true)) }}
 		@foreach($admin->fields as $field_name => $field)
 	        <div class="form-group">
 	            {{ $admin->$field_name->label(array('class' => 'col-lg-2 control-label')) }} 
@@ -29,7 +32,5 @@
 		{{ implode('', $errors->all('<li class="error">:message</li>')) }}
 	</ul>
 @endif
-
-{{ $admin->assets() }}
 
 @stop

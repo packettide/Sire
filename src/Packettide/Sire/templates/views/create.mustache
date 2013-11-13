@@ -6,8 +6,9 @@
 {{=((( )))=}}
 
 <h1>Create ((( NameLiterate )))</h1>
+{{ $admin->assets() }}
 
-{{ Form::open(array('route' => '((( names ))).store', 'role' => 'form', 'class' => 'form-horizontal')) }}
+{{ Form::open(array('route' => '((( names ))).store', 'role' => 'form', 'class' => 'form-horizontal', 'file' => true)) }}
 
 	@foreach($admin->fields as $field_name => $field)
      	<div class="form-group">
@@ -32,6 +33,5 @@
 	</ul>
 @endif
 
-{{ $admin->assets() }}
 
 @stop
