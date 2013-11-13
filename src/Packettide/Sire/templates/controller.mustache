@@ -49,12 +49,19 @@ class {{ Names }}Controller extends BaseController {
 	 */
 	public function store()
 	{
-		$input = Input::all();
+		$input = array_except(Input::all(), '_token');
 		$validation = Validator::make($input, {{ Name }}::$rules);
 
 		if ($validation->passes())
 		{
-			$this->{{ name }}->create($input);
+			$admin  = new Bree('{{ Name }}');
+
+			foreach ($input as $key => $value) {
+				if ($key != '_token')
+					$admin->$key = $value;
+			}
+
+			$admin->save();
 
 			return Redirect::route('{{ names }}.index');
 		}
@@ -115,8 +122,14 @@ class {{ Names }}Controller extends BaseController {
 
 		if ($validation->passes())
 		{
-			${{ name }} = $this->{{ name }}->find($id);
-			${{ name }}->update($input);
+			$admin = new Bree($this->{{ name }}->find($id));
+			
+			foreach ($input as $key => $value) {
+				if ($key != '_token')
+					$admin->$key = $value;
+			}
+
+			$admin->save();
 
 			return Redirect::route('{{ names }}.index');
 		}
