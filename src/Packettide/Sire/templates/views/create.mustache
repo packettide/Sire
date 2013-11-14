@@ -15,6 +15,8 @@
 			{{ $admin->$field_name->label(array('class' => 'col-lg-2 control-label')) }} 
 			<div class="col-lg-6">
 				@if ($admin->$field_name instanceof Packettide\Bree\FieldTypes\Cell)
+					{{ $admin->$field_name->field(array("class" => "table")) }}
+				@else
 					{{ $admin->$field_name->field(array("class" => "form-control")) }}
 				@endif
 			</div>
