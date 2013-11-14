@@ -11,13 +11,15 @@
 {{ Form::open(array('route' => '((( names ))).store', 'role' => 'form', 'class' => 'form-horizontal', 'file' => true)) }}
 
 	@foreach($admin->fields as $field_name => $field)
-     	<div class="form-group">
-            {{ $admin->$field_name->label(array('class' => 'col-lg-2 control-label')) }} 
+		<div class="form-group">
+			{{ $admin->$field_name->label(array('class' => 'col-lg-2 control-label')) }} 
 			<div class="col-lg-6">
-            	{{ $admin->$field_name->field(array("class" => "form-control")) }}
+				@if ($admin->$field_name instanceof Packettide\Bree\FieldTypes\Cell)
+					{{ $admin->$field_name->field(array("class" => "form-control")) }}
+				@endif
 			</div>
-        </div>
-    @endforeach
+		</div>
+	@endforeach
 	<div class="form-group">
 		<div class="col-lg-6 col-lg-offset-2">
 			{{ Form::submit('Submit', array('class' => 'btn btn-success')) }}
