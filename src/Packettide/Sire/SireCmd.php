@@ -42,6 +42,8 @@ class SireCmd extends Command {
 	public function fire()
 	{
 		$this->sire->cmd($this);
+
+		// If given a directory loop through all YAML files within that directory
 		if (is_dir($this->argument('yaml')))
 		{
 			$finder = new Finder();

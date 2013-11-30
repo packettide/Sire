@@ -29,6 +29,7 @@ class SireServiceProvider extends ServiceProvider {
 
     /**
      * Register the service provider.
+     * Register and inject dependencies into the Sire class
      *
      * @return void
      */
@@ -68,9 +69,9 @@ class SireServiceProvider extends ServiceProvider {
 
     	$this->app['sire'] = $this->app->share(function($app)
 		{
-			return new Sire($app['mustache'], $app['templater'], 
-				$app['sire.generators.migration'], 
-				$app['sire.generators.model'], 
+			return new Sire($app['mustache'], $app['templater'],
+				$app['sire.generators.migration'],
+				$app['sire.generators.model'],
                 $app['sire.generators.controller'],
 				$app['sire.generators.view']);
 		});

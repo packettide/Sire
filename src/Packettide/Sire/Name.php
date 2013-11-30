@@ -3,11 +3,12 @@
 use Illuminate\Support\Pluralizer;
 
 /**
-* 
-*/
+ * This class serves as a container for possible
+ * variations of a "name" used in Sire resources
+ */
 class Name
 {
-	
+
 	protected $name;
 
 	function __construct($name)
@@ -17,6 +18,9 @@ class Name
 		$this->generateNames();
 	}
 
+	/**
+	 * Generate all necessary variations of a name
+	 */
 	private function generateNames()
 	{
 		if(!isset($this->Name))
@@ -34,7 +38,7 @@ class Name
 			$this->Names = \Str::studly($this->names);
 		}
 
-		if(!isset($this->nameLiterate)) 
+		if(!isset($this->nameLiterate))
 		{
 			$this->nameLiterate = str_replace("_", " ", $this->name);
 		}
@@ -98,6 +102,6 @@ class Name
     public function literateUpper()
     {
     	return $this->NameLiterate;
-    	
+
     }
 }

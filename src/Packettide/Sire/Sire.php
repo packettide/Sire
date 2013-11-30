@@ -10,11 +10,21 @@ use Mustache_Engine as Mustache;
 
 class Sire {
 
+	/**
+	 * Resource name
+	 * @var string
+	 */
 	public $name;
+
+	/**
+	 * Resource fields
+	 * @var array
+	 */
 	public $fields = array();
 	public $file;
 
-	public function __construct(Mustache $mustache, Templater $templater, 
+
+	public function __construct(Mustache $mustache, Templater $templater,
 		MigrationGenerator $miGen, ModelGenerator $mGen, ControllerGenerator $cGen,
 		ViewGenerator $vGen)
 	{
@@ -26,11 +36,19 @@ class Sire {
 		$this->viewGenerator = $vGen;
 	}
 
+	/**
+	 * Reset all of the Sire fields
+	 */
 	public function reset()
 	{
 		$this->fields = array();
 	}
 
+	/**
+	 * Use a YAML file for field information setup
+	 * @param  string $yamlFileLocation
+	 * @return Packettide\Sire
+	 */
 	public function with($yamlFileLocation)
 	{
 		$this->getYaml($yamlFileLocation);
@@ -43,6 +61,9 @@ class Sire {
 		$this->command = $command;
 	}
 
+	/**
+	 * Run all of the generators and update routes
+	 */
 	public function run() {
 		$this->migrationGenerator->run($this);
 		$this->modelGenerator->run($this);
@@ -51,31 +72,38 @@ class Sire {
 		$this->updateRoutesFile();
 	}
 
+	/**
+	 * Parse the field information from a given YAML file
+	 * @param  string $yamlFileLocation
+	 */
 	private function getYaml($yamlFileLocation)
 	{
 		$fields = file_get_contents($yamlFileLocation);
-        $fields = Yaml::parse($fields);
+		$fields = Yaml::parse($fields);
 
-        $this->fields = array();
+		$this->fields = array();
 
-        foreach ($fields as $key => $value) 
-        {
-        	// This is a *special field like name
-        	if(strpos($key, '_') === 0)
-        	{
-        		$this->{ltrim($key, '_')} = $value;
-        	}
-        	else
-        	{
-        		$this->fields[$key] = $value;
-        		$this->fields[$key]['_name'] = $key;
-        	}
-        }
+		foreach ($fields as $key => $value)
+		{
+			// This is a *special field like name
+			if(strpos($key, '_') === 0)
+			{
+				$this->{ltrim($key, '_')} = $value;
+			}
+			else
+			{
+				$this->fields[$key] = $value;
+				$this->fields[$key]['_name'] = $key;
+			}
+		}
 	}
 
-	private function setupNames() 
+	/**
+	 * Generate proper names for this resource
+	 */
+	private function setupNames()
 	{
-		if(!isset($this->name)) 
+		if(!isset($this->name))
 		{
 			throw new \InvalidArgumentException('At minimum you must specify _name');
 		}
@@ -86,7 +114,12 @@ class Sire {
 		}
 	}
 
-	public function assocToNumeric($array) 
+	/**
+	 * Transform an associative array into a numeric one
+	 * @param  array $array
+	 * @return array
+	 */
+	public function assocToNumeric($array)
 	{
 		$newArray = array();
 
@@ -103,7 +136,7 @@ class Sire {
 
 		foreach ($haystack as $subHaystack)
 		{
-			if (isset($subHaystack[$needle])) 
+			if (isset($subHaystack[$needle]))
 			{
 				$subHaystack[$needle][$with] = $subHaystack[$with];
 				array_push($toReturn, $subHaystack[$needle]);
@@ -113,6 +146,10 @@ class Sire {
 		return $toReturn;
 	}
 
+	/**
+	 * Structure validation rules for a given field
+	 * @return array
+	 */
 	public function getRules()
 	{
 		$toReturn = array();
@@ -131,12 +168,14 @@ class Sire {
 		return $toReturn;
 	}
 
+	/**
+	 * Add an entry for this resource to the routes file
+	 */
 	public function updateRoutesFile()
-    {
-
+	{
 		$data = "\n\nRoute::resource('" . $this->name->plural() . "', '" . ucwords($this->name->pluralUpper()) . "Controller');";
 
-        file_put_contents(app_path() . '/routes.php', $data, FILE_APPEND);
-    }
+		file_put_contents(app_path() . '/routes.php', $data, FILE_APPEND);
+	}
 
 }
