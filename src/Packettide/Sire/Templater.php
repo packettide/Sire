@@ -3,7 +3,7 @@
 use Mustache_Engine as Mustache;
 
 /**
-*
+* Setup and render Mustache templates
 */
 
 class Templater
@@ -14,11 +14,20 @@ class Templater
 		$this->mustache = $mustache;
 	}
 
+	/**
+	 * Set name to use with Templater
+	 * @param  Packettide\Sire\Name   $name
+	 */
 	public function with(Name $name)
 	{
 		$this->name = $name;
 	}
 
+	/**
+	 * Add Name data to a given array
+	 * @param  array $array
+	 * @return array
+	 */
 	private function augmentArray($array)
 	{
 		$baseData = array(
@@ -30,20 +39,28 @@ class Templater
 			"NameLiterate" => $this->name->literateUpper(),
 			"namesLiterate" => $this->name->pluralLiterate(),
 			"NamesLiterate" => $this->name->pluralLiterateUpper(),
-			);
+		);
 
 		return array_merge($array, $baseData);
 	}
 
+	/**
+	 * Process a template
+	 * @param  string $template Mustache template
+	 * @param  array $data
+	 * @param  string $target
+	 */
 	public function template($template, $data, $target)
 	{
 		$path = dirname($target);
-		if (!is_dir($path))
-		{
-		  mkdir($path);
-		}
+
+		// Make sure target directory exists
+		if (!is_dir($path)) mkdir($path);
+
 		$augmentedData = $this->augmentArray($data);
 		$rendered = $this->mustache->render($template, $augmentedData);
+
+		// Save data to $target location
 		file_put_contents($target, $rendered);
 	}
 }

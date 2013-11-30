@@ -12,20 +12,26 @@ class MigrationGenerator {
 		$this->migrationTemplate = file_get_contents(__DIR__.'/../templates/migration.mustache');
 	}
 
+	/**
+	 * Generate Migration file from template
+	 * @param  Packettide\Sire\Sire $sire
+	 */
 	public function run($sire)
 	{
 		$fields = $sire->assocToNumeric($sire->fields);
 
 		$path = app_path() . '/database/migrations/';
 
+		// @max - any reason for $finder to be set as class var here? is state used somewhere else?
 		$this->finder = $this->finder->create();
-
 		$this->finder->files()->in($path)->name('*_create_' . $sire->name->plural() . '_table.php');
 
 		if($this->finder->count() != 0)
 		{
-			foreach ($this->finder as $file) {
+			foreach ($this->finder as $file)
+			{
 				$migrationName = explode(".php", $file->getRelativePathname());
+
 				if ($this->migrator->repositoryExists() && in_array($migrationName[0], $this->migrator->getRepository()->getRan()))
 				{
 					if ($sire->command->confirm("This is will down {$migrationName[0]}. Do you wish to continue? [yes|no]"))
@@ -41,6 +47,7 @@ class MigrationGenerator {
 						throw new \Exception("Please resolve the conflicting migration and try again.", 1);
 					}
 				}
+
 				unlink($path.$file->getRelativePathname());
 			}
 		}
@@ -50,7 +57,7 @@ class MigrationGenerator {
 		$toTemplate = array(
 			"tableName" => $sire->name->plural(),
 			"fields" => $fields,
-			);
+		);
 
 		$sire->templater->template($this->migrationTemplate, $toTemplate, $path.$name);
 	}

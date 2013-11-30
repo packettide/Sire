@@ -46,7 +46,7 @@ class Sire {
 	/**
 	 * Use a YAML file for field information setup
 	 * @param  string $yamlFileLocation
-	 * @return Packettide\Sire
+	 * @return Packettide\Sire\Sire
 	 */
 	public function with($yamlFileLocation)
 	{

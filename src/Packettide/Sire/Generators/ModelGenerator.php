@@ -7,9 +7,12 @@ class ModelGenerator {
 		$this->modelTemplate = file_get_contents(__DIR__.'/../templates/model.mustache');
 	}
 
+	/**
+	 * Generate Model file from template
+	 * @param  Packettide\Sire\Sire $sire
+	 */
 	public function run($sire)
 	{
-
 		$fields = $sire->pluckWith('bree', $sire->fields, '_name');
 		$relationships = $sire->pluckWith('relationships', $sire->fields, '_name');
 
@@ -25,7 +28,7 @@ class ModelGenerator {
 			"rules" => $sire->getRules(),
 			"relationships" => $relationships,
 			"breeFields" => $fields,
-			);
+		);
 
 		$sire->templater->template($this->modelTemplate, $toTemplate, $path.$name);
 	}

@@ -7,6 +7,10 @@ class ControllerGenerator {
 		$this->controllerTemplate = file_get_contents(__DIR__.'/../templates/controller.mustache');
 	}
 
+	/**
+	 * Generate Controller file from template
+	 * @param  Packettide\Sire\Sire $sire
+	 */
 	public function run($sire)
 	{
 		$path = app_path() . '/controllers/';
