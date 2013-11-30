@@ -1,5 +1,4 @@
-<?php 
-namespace Packettide\Sire\Generators;
+<?php namespace Packettide\Sire\Generators;
 
 class ViewGenerator
 {
@@ -40,5 +39,3 @@ class ViewGenerator
 		$sire->templater->template($this->viewTemplates['layout.blade.php'], $toTemplate, app_path() . '/views/layouts/layout.blade.php');
 	}
 }
-
- ?>

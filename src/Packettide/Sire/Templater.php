@@ -1,13 +1,14 @@
 <?php namespace Packettide\Sire;
 
-
 use Mustache_Engine as Mustache;
+
 /**
-* 
+*
 */
+
 class Templater
 {
-	
+
 	function __construct(Mustache $mustache)
 	{
 		$this->mustache = $mustache;
@@ -46,5 +47,3 @@ class Templater
 		file_put_contents($target, $rendered);
 	}
 }
-
- ?>

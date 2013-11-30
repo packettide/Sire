@@ -1,5 +1,4 @@
-<?php 
-namespace Packettide\Sire\Generators;
+<?php namespace Packettide\Sire\Generators;
 
 class ControllerGenerator {
 
@@ -19,5 +18,3 @@ class ControllerGenerator {
 	}
 
 }
-
- ?>

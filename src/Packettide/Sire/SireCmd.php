@@ -1,5 +1,4 @@
-<?php
-namespace Packettide\Sire;
+<?php namespace Packettide\Sire;
 
 
 use Illuminate\Console\Command;

@@ -1,5 +1,4 @@
-<?php 
-namespace Packettide\Sire\Generators;
+<?php namespace Packettide\Sire\Generators;
 
 use Symfony\Component\Finder\Finder;
 use Illuminate\Database\Migrations\Migrator;
@@ -41,11 +40,11 @@ class MigrationGenerator {
 					{
 						throw new \Exception("Please resolve the conflicting migration and try again.", 1);
 					}
-				}					
+				}
 				unlink($path.$file->getRelativePathname());
 			}
 		}
-	
+
 		$name = date('Y_m_d_His') . '_create_' . $sire->name->plural() . '_table.php';
 
 		$toTemplate = array(
@@ -57,5 +56,3 @@ class MigrationGenerator {
 	}
 
 }
-
- ?>

@@ -1,5 +1,4 @@
-<?php
-namespace Packettide\Sire;
+<?php namespace Packettide\Sire;
 
 use Symfony\Component\Yaml\Yaml;
 use Packettide\Sire\Generators\MigrationGenerator;
