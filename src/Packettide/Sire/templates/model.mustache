@@ -11,7 +11,7 @@ class {{ Name }} extends Eloquent {
 
 	public $breeFields = array(
 	{{# breeFields  }}
-		'{{ _name }}'  => array('type' => '{{ fieldType }}', 'label' => '{{ label }}', {{ breeAttrs }}),
+		'{{ _name }}'  => array('type' => '{{ fieldType }}', 'label' => '{{ label }}', {{{ breeAttrs }}}),
 	{{/ breeFields }}
 	);
 {{#relationships}}

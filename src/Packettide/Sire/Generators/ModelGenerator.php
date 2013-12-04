@@ -30,14 +30,20 @@ class ModelGenerator {
 
 		$fields = array_map(function ($el) {
 			if (isset($el['fieldTypeOptions'])) {
-				$el['breeAttrs'] = implode(', ', array_map(function ($v, $k) {
+				$el['breeAttrs'] = array_map(function ($v, $k) {
 					if (!($v === true || $v === false))
 					{
 						$v = "'$v'";
 					}
 					return sprintf("'%s' => %s", $k, $v);
-				}, $el['fieldTypeOptions'], array_keys($el['fieldTypeOptions'])));
+				}, $el['fieldTypeOptions'], array_keys($el['fieldTypeOptions']));
 			}
+			$el['breeAttrs'] = (isset($el['breeAttrs']))? $el['breeAttrs'] : array();
+			if (isset($el['relatedModel']))
+			{
+				array_push($el['breeAttrs'], "'related' => '${el['relatedModel']}'");
+			}
+			$el['breeAttrs'] = implode(", ", $el['breeAttrs']);
 			return $el;
 		}, $fields);
 
