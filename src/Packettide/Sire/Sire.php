@@ -16,6 +16,25 @@ class Sire {
 	public $name;
 
 	/**
+	 * Resource members, aka what should this resource generate?
+	 * @var array
+	 */
+	public $makes;
+
+	/**
+	 * What can we generate, and the name of the functions that 
+	 * we should call instead if any.
+	 * @var  array
+	 */
+	private $makeable = array(
+		'migration' => null,
+		'model' => null,
+		'view' => null,
+		'controller' => null,
+		'route' => array('updateRoutesFile'),
+		);
+
+	/**
 	 * Resource fields
 	 * @var array
 	 */
@@ -64,11 +83,20 @@ class Sire {
 	 * Run all of the generators and update routes
 	 */
 	public function run() {
-		$this->migrationGenerator->run($this);
-		$this->modelGenerator->run($this);
-		$this->controllerGenerator->run($this);
-		$this->viewGenerator->run($this);
-		$this->updateRoutesFile();
+		foreach ($this->makeable as $toMake => $methods) 
+		{
+			if($methods && in_array($toMake, $this->makes)) 
+			{
+				foreach ($methods as $method) 
+				{
+					$this->{$method}();
+				}
+			} 
+			else if (in_array($toMake, $this->makes))
+			{
+				$this->{$toMake.'Generator'}->run($this);
+			}
+		}
 	}
 
 	/**

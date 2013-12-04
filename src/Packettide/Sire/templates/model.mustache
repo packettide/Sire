@@ -4,24 +4,19 @@ class {{ Name }} extends Eloquent {
 	protected $guarded = array();
 
 	public static $rules = array(
-	{{#rules}}
+	{{# rules }}
 		"{{ _name }}" => "{{ rules }}",
-	{{/rules}}
+	{{/ rules }}
 		);
 
 	public $breeFields = array(
-{{#breeFields}}
-	{{# related }}
-		'{{ _name }}'  => array('type' => '{{ type }}', 'label' => '{{ label }}', 'select' => {{# select }}true{{/ select }}{{^ select }}false{{/ select}}, 'related' => '{{ related }}', 'title' => '{{ title }}'),
-	{{/ related}}
-	{{^ related }}
-		'{{ _name }}'  => array('type' => '{{ type }}', 'label' => '{{ label }}'),
-	{{/ related}}
-{{/breeFields}}
+	{{# breeFields  }}
+		'{{ _name }}'  => array('type' => '{{ fieldType }}', 'label' => '{{ label }}', {{ breeAttrs }}),
+	{{/ breeFields }}
 	);
 {{#relationships}}
 
-	public function {{ name }}()
+	public function {{ _name }}()
 	{
 	    return $this->{{ type }}('{{ model }}');
 	}

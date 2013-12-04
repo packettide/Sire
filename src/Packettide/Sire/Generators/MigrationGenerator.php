@@ -18,11 +18,28 @@ class MigrationGenerator {
 	 */
 	public function run($sire)
 	{
-		$fields = $sire->assocToNumeric($sire->fields);
+		$tempFields = $sire->assocToNumeric($sire->fields);
+		$fields = array();
+
+		foreach ($tempFields as $field)
+		{
+			$temp = $field;
+			if (isset($temp['relationshipType']) && $temp['relationshipType'] === 'belongsTo') 
+			{
+				$temp['sqlType'] = 'integer';
+				$temp['_name'] = $temp['_name'] . '_id';
+				array_push($fields, $temp);
+			} 
+			else if (!isset($temp['relationshipType']))
+			{
+				array_push($fields, $temp);
+			}
+		}
 
 		$path = app_path() . '/database/migrations/';
 
 		// @max - any reason for $finder to be set as class var here? is state used somewhere else?
+		// @TODO - WAT how is this code so messy?
 		$this->finder = $this->finder->create();
 		$this->finder->files()->in($path)->name('*_create_' . $sire->name->plural() . '_table.php');
 

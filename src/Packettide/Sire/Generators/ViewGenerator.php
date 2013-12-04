@@ -23,7 +23,7 @@ class ViewGenerator
 
 		$names = array('create.blade.php', 'edit.blade.php', 'index.blade.php');
 		$headings = array_map(function ($el) {
-			return array("heading" => $el['bree']['label']);
+			return array("heading" => $el['label']);
 		}, $sire->fields);
 
 		$toTemplate = array(

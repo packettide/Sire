@@ -13,13 +13,35 @@ class ModelGenerator {
 	 */
 	public function run($sire)
 	{
-		$fields = $sire->pluckWith('bree', $sire->fields, '_name');
-		$relationships = $sire->pluckWith('relationships', $sire->fields, '_name');
+		$fields = $sire->fields;
+		$tempRelationships = $sire->fields;
+		$relationships = array();
 
-		$relationships = array_map(function ($el) {
-			$el['name'] = \Str::camel($el['name']);
+		foreach ($tempRelationships as $key => $value) {
+			if (isset($value['relationshipType']) && isset($value['relatedModel']))
+			{
+				$temp = array();
+				$temp['_name'] = \Str::camel($value['_name']);
+				$temp['type'] = $value['relationshipType'];
+				$temp['model'] = $value['relatedModel'];
+				array_push($relationships, $temp);
+			}
+		}
+
+		$fields = array_map(function ($el) {
+			if (isset($el['fieldTypeOptions'])) {
+				$el['breeAttrs'] = implode(', ', array_map(function ($v, $k) {
+					if (!($v === true || $v === false))
+					{
+						$v = "'$v'";
+					}
+					return sprintf("'%s' => %s", $k, $v);
+				}, $el['fieldTypeOptions'], array_keys($el['fieldTypeOptions'])));
+			}
 			return $el;
-		}, $relationships);
+		}, $fields);
+
+		$fields = $sire->assocToNumeric($fields);
 
 		$path = app_path() . '/models/';
 		$name = $sire->name->upper().'.php';
