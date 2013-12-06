@@ -42,8 +42,6 @@ The `_name` field tells Sire what the name of the things (views, controller, mod
 
 The `_makes` field tells Sire what to generate for this model. Current options are 
 
-The `_viewTheme` field tells Sire what the visual look of the app should be. For right now the only options are:
-
 * `model`
 * `view`
 * `controller`
@@ -51,8 +49,11 @@ The `_viewTheme` field tells Sire what the visual look of the app should be. For
 * `route`
 * Seeds, pivots and more coming soon.
 
+The `_viewTheme` field tells Sire what the visual look of the app should be. For right now the only options are:
+
 * `bs3`, which is a Bootstrap 3 powered look
 * `naked` which just generates bare information that you should wrap your own markup around.
+* `foundation5`, based on the new version of Zurb Foundation. (Note: This is on the experimental side and may be a little broken in places.)
 
 The `_codeTheme` doesn't do anything for now but it is there for fowards compatibility
 

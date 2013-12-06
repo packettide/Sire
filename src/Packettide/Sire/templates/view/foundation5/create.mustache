@@ -1,0 +1,46 @@
+@extends('layouts.foundation5')
+
+@section('main')
+
+{{! We don't want to mess with Blade }}
+{{=((( )))=}}
+
+<div class="row">
+	<h1>Create ((( NameLiterate )))</h1>
+</div>
+
+{{ $admin->assets() }}
+
+{{ Form::open(array('route' => '((( names ))).store', 'role' => 'form', 'files' => true)) }}
+
+	@foreach($admin->fields as $field_name => $field)
+		<div class="row">
+			{{ $admin->$field_name->label(array('class' => 'large-2 columns')) }} 
+			<div class="large-6 columns">
+				@if ($admin->$field_name instanceof Packettide\Bree\FieldTypes\Cell)
+					{{ $admin->$field_name->field(array("class" => "large-12 columns")) }}
+				@else
+					{{ $admin->$field_name->field(array("class" => "large-12 columns", "style" => "font-size: 16px;padding: 0.5em;"))) }}
+				@endif
+			</div>
+		</div>
+	@endforeach
+	<div class="row">
+		<div class="large-6 columns">
+			{{ Form::submit('Submit', array('class' => 'button success')) }}
+			{{ link_to_route('((( names ))).index', 'Cancel', array(), array('class' => 'button alert')) }}
+		</div>
+	</div>
+
+{{ Form::close() }}
+
+<div class="row">
+	@if ($errors->any())
+		<ul>
+			{{ implode('', $errors->all('<li class="error">:message</li>')) }}
+		</ul>
+	@endif
+</div>
+
+
+@stop

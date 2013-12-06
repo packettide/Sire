@@ -1,0 +1,70 @@
+@extends('layouts.foundation5')
+
+@section('main')
+ 
+{{! We don't want to mess with Blade }}
+{{=((( )))=}}
+
+<div class="row">
+	<h1>All ((( NamesLiterate )))</h1>
+</div>
+
+<div class="row">
+	<p>
+		<a href="((( names )))/create" class="button success"> + Add new ((( nameLiterate )))</a>
+	</p>
+</div>
+
+<div class="row">
+	@if ( $((( names )))->count() )
+		<table>
+			<thead>
+				<tr>
+				(((# headings )))
+				(((^ hide )))
+					<th>
+						((( heading )))
+					</th>
+				(((/ hide )))
+				(((/ headings )))
+					<th colspan="2">
+						Actions
+					</th>
+				</tr>
+			</thead>
+	
+			<tbody>
+				@foreach ( $((( names ))) as $((( name ))) )
+					<tr>
+				(((# fields )))
+					(((^ hide )))
+						(((# realField )))
+						<td>
+							{{ implode(\Illuminate\Support\Collection::make($((( name )))->((({ realField })))), ", ") }}
+						</td>
+						(((/ realField )))
+						(((^ realField )))
+						<td>
+							{{ $((( name )))->(((_name))) }}
+						</td>
+						(((/ realField )))
+					(((/ hide )))
+				(((/ fields )))
+						<td>
+							{{ link_to_route('((( names ))).edit', 'Edit', array($((( name )))->id), array('class' => 'button secondary')) }}
+						</td>
+						<td>
+							{{ Form::open(array('method' => 'DELETE', 'route' => array('((( names ))).destroy', $((( name )))->id))) }}
+	                            {{ Form::submit('Delete', array('class' => 'button alert')) }}
+	                        {{ Form::close() }}
+						</td>
+					</tr>
+				@endforeach
+			</tbody>
+		</table>
+	@else
+		There are no ((( namesLiterate )))
+	@endif
+</div>
+
+@stop

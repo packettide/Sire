@@ -1,0 +1,45 @@
+@extends('layouts.foundation5')
+
+@section('main')
+
+{{! We don't want to mess with Blade }}
+{{=((( )))=}}
+
+<div class="row">
+	<h1>Edit ((( NameLiterate )))</h1>
+</div>
+
+{{ $admin->assets() }}
+
+{{ Form::open(array('route' => array('((( names ))).update', $admin->id), 'method' => 'PATCH', 'role' => 'form', 'class' => 'form-horizontal', 'files' => true)) }}
+
+	@foreach($admin->fields as $field_name => $field)
+		<div class="row">
+			{{ $admin->$field_name->label(array('class' => 'large-2 columns control-label')) }} 
+			<div class="large-6 columns">
+				@if ($admin->$field_name instanceof Packettide\Bree\FieldTypes\Cell)
+					{{ $admin->$field_name->field(array("class" => "table")) }}
+				@else
+					{{ $admin->$field_name->field(array("class" => "form-control")) }}
+				@endif
+			</div>
+		</div>
+	@endforeach
+	<div class="row">
+		<div class="large-6 columns">
+			{{ Form::submit('Submit', array('class' => 'button success')) }}
+			{{ link_to_route('((( names ))).index', 'Cancel', array(), array('class' => 'button alert')) }}
+		</div>
+	</div>
+
+{{ Form::close() }}
+
+@if ($errors->any())
+	<div class="row">
+		<ul>
+			{{ implode('', $errors->all('<li class="error">:message</li>')) }}
+		</ul>
+	</div>
+@endif
+
+@stop
