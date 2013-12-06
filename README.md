@@ -47,7 +47,8 @@ The `_makes` field tells Sire what to generate for this model. Current options a
 * `controller`
 * `migration`
 * `route`
-* Seeds, pivots and more coming soon.
+* `seed`
+* Pivots and more coming soon.
 
 The `_viewTheme` field tells Sire what the visual look of the app should be. For right now the only options are:
 
@@ -108,3 +109,27 @@ We are going to give this field a fieldType of Relate. A belongsTo will mean tha
 * `relatedModel` which tells Sire to relate it to the more class
 * `fieldTypeOptions` telling Sire that we want this to be select relate rather than a radio button and we want to label each option with the title from that model.
 
+
+#### Adding a Seeder
+
+The `_seeds` special field is used to create a seeder. 
+
+	_seeds:
+		-
+			title: ' "Thing One" '
+			new: ' false '
+		-
+			title: ' "Thing Two" '
+			new: ' true '
+
+This will create two intances of our `Thing` model with different titles. The most important thing to not here is that we cannot use bare strings. In order for Sire to understand your seeds you need wrap them in `'`, additionally you will want to wrap the words Thing One and Thing Two in `"` since these are strings. This is slightly confusing but required due to the way yaml works. You can see that with the boolean field new, we do not wrap it in `"`, since it is not a string.
+
+Lastly we need to tell Sire to make a seed, like so:
+	
+	_makes:
+		- model
+		- view
+		- controller
+		- migration
+		- route
+		- seed

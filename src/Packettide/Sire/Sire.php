@@ -5,6 +5,7 @@ use Packettide\Sire\Generators\MigrationGenerator;
 use Packettide\Sire\Generators\ModelGenerator;
 use Packettide\Sire\Generators\ControllerGenerator;
 use Packettide\Sire\Generators\ViewGenerator;
+use Packettide\Sire\Generators\SeedGenerator;
 use Mustache_Engine as Mustache;
 
 class Sire {
@@ -37,6 +38,7 @@ class Sire {
 		'model' => null,
 		'view' => null,
 		'controller' => null,
+		'seed' => null,
 		'route' => array('updateRoutesFile'),
 		);
 
@@ -50,7 +52,7 @@ class Sire {
 
 	public function __construct(Mustache $mustache, Templater $templater,
 		MigrationGenerator $miGen, ModelGenerator $mGen, ControllerGenerator $cGen,
-		ViewGenerator $vGen)
+		ViewGenerator $vGen, SeedGenerator $sGen)
 	{
 		$this->mustache = $mustache;
 		$this->templater = $templater;
@@ -58,6 +60,7 @@ class Sire {
 		$this->modelGenerator = $mGen;
 		$this->controllerGenerator = $cGen;
 		$this->viewGenerator = $vGen;
+		$this->seedGenerator = $sGen;
 	}
 
 	/**
@@ -207,9 +210,18 @@ class Sire {
 	 */
 	public function updateRoutesFile()
 	{
-		$data = "\n\nRoute::resource('" . $this->name->plural() . "', '" . ucwords($this->name->pluralUpper()) . "Controller');";
 
-		file_put_contents(app_path() . '/routes.php', $data, FILE_APPEND);
+		$path = app_path() . '/routes.php';
+
+        $content = file_get_contents($path);
+
+		$data = "Route::resource('" . $this->name->plural() . "', '" . ucwords($this->name->pluralUpper()) . "Controller');";
+        
+        if ( ! strpos($content, $data))
+        {
+			file_put_contents($path, "\n\n".$data, FILE_APPEND);
+        }
+
 	}
 
 }

@@ -10,7 +10,6 @@ class ViewGenerator
 
 	public function setupTemplates($sire)
 	{
-		var_dump($sire->viewTheme);
 		$this->viewTemplates = array(
 			"create.blade.php" => file_get_contents(__DIR__.'/../templates/view/'.$sire->viewTheme.'/create.mustache'),
 			"edit.blade.php" => file_get_contents(__DIR__.'/../templates/view/'.$sire->viewTheme.'/edit.mustache'),
