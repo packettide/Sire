@@ -5,11 +5,16 @@ class ViewGenerator
 
 	public function __construct()
 	{
+		
+	}
+
+	public function setupTemplates($sire)
+	{
 		$this->viewTemplates = array(
-			"create.blade.php" => file_get_contents(__DIR__.'/../templates/views/create.mustache'),
-			"edit.blade.php" => file_get_contents(__DIR__.'/../templates/views/edit.mustache'),
-			"index.blade.php" => file_get_contents(__DIR__.'/../templates/views/index.mustache'),
-			"layout.blade.php" => file_get_contents(__DIR__.'/../templates/views/layout.mustache'),
+			"create.blade.php" => file_get_contents(__DIR__.'/../templates/view/'.$sire->viewTheme.'/create.mustache'),
+			"edit.blade.php" => file_get_contents(__DIR__.'/../templates/view/'.$sire->viewTheme.'/edit.mustache'),
+			"index.blade.php" => file_get_contents(__DIR__.'/../templates/view/'.$sire->viewTheme.'/index.mustache'),
+			"layout.blade.php" => file_get_contents(__DIR__.'/../templates/view/'.$sire->viewTheme.'/layout.mustache'),
 		);
 	}
 
@@ -23,12 +28,24 @@ class ViewGenerator
 
 		$names = array('create.blade.php', 'edit.blade.php', 'index.blade.php');
 		$headings = array_map(function ($el) {
-			return array("heading" => $el['label']);
+			return array("heading" => $el['label'], 'hide' => ($el['fieldType'] == 'None'));
 		}, $sire->fields);
+
+		$tempFields = $sire->fields;
+		$fields = array();
+
+		foreach ($tempFields as $key => $value) {
+			$value['realField'] = isset($value['relatedModel']) && isset($value['fieldTypeOptions']);
+			$value['realField'] = ($value['realField'])? ($key . "->" . $value['fieldTypeOptions']['title']) : false;
+			$value['hide'] = ($value['fieldType'] == 'None');
+			array_push($fields, $value);
+		}
+
+		$fields = $sire->assocToNumeric($fields);
 
 		$toTemplate = array(
 			"headings" => $sire->assocToNumeric($headings),
-			"fields" => $sire->assocToNumeric($sire->fields),
+			"fields" => $fields,
 		);
 
 		foreach ($names as $name) {
@@ -42,7 +59,7 @@ class ViewGenerator
 		$layoutPath = app_path() . '/views/layouts/';
 		if (!is_dir($layoutPath)) mkdir($layoutPath);
 
-		$sire->templater->template($this->viewTemplates['layout.blade.php'], $toTemplate, $layoutPath .'layout.blade.php');
+		$sire->templater->template($this->viewTemplates['layout.blade.php'], $toTemplate, $layoutPath .$sire->viewTheme.'.blade.php');
 	}
 
 }

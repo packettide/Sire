@@ -1,0 +1,20 @@
+@extends('layouts.naked')
+
+@section('main')
+ 
+{{! We don't want to mess with Blade }}
+{{=((( )))=}}
+
+{{ Form::open(array('route' => array('((( names ))).create'), 'method' => 'POST', 'role' => 'form', 'class' => 'form-horizontal', 'files' => true)) }}
+
+(((# fields )))
+	(((^ hide )))
+	{{ $admin->((( _name ))) }} <br>
+	(((/ hide )))
+(((/ fields )))
+
+	{{ Form::submit('Update', array('class' => 'btn btn-success')) }}
+
+{{ Form::close() }}
+
+@stop

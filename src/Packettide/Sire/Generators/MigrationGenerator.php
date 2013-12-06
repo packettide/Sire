@@ -9,7 +9,7 @@ class MigrationGenerator {
 	{
 		$this->finder = $finder;
 		$this->migrator = $migrator;
-		$this->migrationTemplate = file_get_contents(__DIR__.'/../templates/migration.mustache');
+		$this->migrationTemplate = file_get_contents(__DIR__.'/../templates/code/migration.mustache');
 	}
 
 	/**

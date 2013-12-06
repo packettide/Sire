@@ -40,6 +40,22 @@ The `_name` field tells Sire what the name of the things (views, controller, mod
 
 * It should be a singular, snake case, name. Sire will turn that into the other formats of the name it needs, including real words.
 
+The `_makes` field tells Sire what to generate for this model. Current options are 
+
+The `_viewTheme` field tells Sire what the visual look of the app should be. For right now the only options are:
+
+* `model`
+* `view`
+* `controller`
+* `migration`
+* `route`
+* Seeds, pivots and more coming soon.
+
+* `bs3`, which is a Bootstrap 3 powered look
+* `naked` which just generates bare information that you should wrap your own markup around.
+
+The `_codeTheme` doesn't do anything for now but it is there for fowards compatibility
+
 In addition to these special paramters there are also the members of the model. The `title` field is a parameter that will appear on the resulting model. 
 
 * It has an `sqlType` which tells the migration generator what format the column should be, see [here](http://laravel.com/docs/schema) for more info about the types availible. 

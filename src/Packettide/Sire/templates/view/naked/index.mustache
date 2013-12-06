@@ -1,4 +1,4 @@
-@extends('layouts.layout')
+@extends('layouts.naked')
 
 @section('main')
  
@@ -8,18 +8,19 @@
 <h1>All ((( NamesLiterate )))</h1>
 
 <p>
-	<a href="((( names )))/create" class="btn btn-success"><i class="glyphicon-plus"></i> 
-	Add new ((( nameLiterate )))</a>
+	<a href="((( names )))/create">Add new ((( nameLiterate )))</a>
 </p>
 
 @if ( $((( names )))->count() )
-	<table class="table table-striped table-bordered">
+	<table>
 		<thead>
 			<tr>
 			(((# headings )))
+			(((^ hide )))
 				<th>
 					((( heading )))
 				</th>
+			(((/ hide )))
 			(((/ headings )))
 				<th colspan="2">
 					Actions
@@ -30,10 +31,11 @@
 		<tbody>
 			@foreach ( $((( names ))) as $((( name ))) )
 				<tr>
-				(((# fields )))
+			(((# fields )))
+				(((^ hide )))
 					(((# realField )))
 					<td>
-						{{ $((( name )))->((( field )))->((( title ))) }}
+						{{ implode(((({ realField }))), ", ") }}
 					</td>
 					(((/ realField )))
 					(((^ realField )))
@@ -41,13 +43,14 @@
 						{{ $((( name )))->(((_name))) }}
 					</td>
 					(((/ realField )))
-				(((/ fields )))
+				(((/ hide )))
+			(((/ fields )))
 					<td>
-						{{ link_to_route('((( names ))).edit', 'Edit', array($((( name )))->id), array('class' => 'btn btn-info')) }}
+						{{ link_to_route('((( names ))).edit', 'Edit', array($((( name )))->id), array('class' => '')) }}
 					</td>
 					<td>
 						{{ Form::open(array('method' => 'DELETE', 'route' => array('((( names ))).destroy', $((( name )))->id))) }}
-                            {{ Form::submit('Delete', array('class' => 'btn btn-danger')) }}
+                            {{ Form::submit('Delete', array('class' => '')) }}
                         {{ Form::close() }}
 					</td>
 				</tr>

@@ -4,7 +4,7 @@ class ModelGenerator {
 
 	public function __construct()
 	{
-		$this->modelTemplate = file_get_contents(__DIR__.'/../templates/model.mustache');
+		$this->modelTemplate = file_get_contents(__DIR__.'/../templates/code/model.mustache');
 	}
 
 	/**

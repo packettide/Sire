@@ -4,7 +4,7 @@ class ControllerGenerator {
 
 	public function __construct()
 	{
-		$this->controllerTemplate = file_get_contents(__DIR__.'/../templates/controller.mustache');
+		$this->controllerTemplate = file_get_contents(__DIR__.'/../templates/code/controller.mustache');
 	}
 
 	/**
