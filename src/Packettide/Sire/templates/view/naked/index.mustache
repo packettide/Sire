@@ -35,7 +35,7 @@
 				(((^ hide )))
 					(((# realField )))
 					<td>
-						{{ implode(\Illuminate\Support\Collection::make($((( name )))->((({ realField })))), ", ") }}
+						{{ implode(array_pluck(\Illuminate\Support\Collection::make($((( name )))->((( _name )))), '((( realField )))'), ", ") }}
 					</td>
 					(((/ realField )))
 					(((^ realField )))

@@ -36,7 +36,7 @@ class ViewGenerator
 
 		foreach ($tempFields as $key => $value) {
 			$value['realField'] = isset($value['relatedModel']) && isset($value['fieldTypeOptions']);
-			$value['realField'] = ($value['realField'])? ($key . "->" . $value['fieldTypeOptions']['title']) : false;
+			$value['realField'] = ($value['realField'])? $value['fieldTypeOptions']['title'] : false;
 			$value['hide'] = ($value['fieldType'] == 'None');
 			array_push($fields, $value);
 		}
