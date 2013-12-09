@@ -6,21 +6,21 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Finder\Finder;
 
-class SireCmd extends Command {
+class SireReset extends Command {
 
 	/**
 	 * The console command name.
 	 *
 	 * @var string
 	 */
-	protected $name = 'sire';
+	protected $name = 'sire:reset';
 
 	/**
 	 * The console command description.
 	 *
 	 * @var string
 	 */
-	protected $description = 'Excellent generation';
+	protected $description = 'Undo a sire generation';
 
 	/**
 	 * Create a new command instance.
@@ -49,12 +49,12 @@ class SireCmd extends Command {
 			$finder->files()->in($this->argument('yaml'))->name("*.yaml")->name("*.yml");
 			foreach ($finder as $yaml) {
 				$this->sire->reset();
-				$this->sire->with($yaml)->run();
+				$this->sire->with($yaml)->remove();
 			}
 		}
 		else
 		{
-			$this->sire->with($this->argument('yaml'))->run();
+			$this->sire->with($this->argument('yaml'))->remove();
 		}
 		$this->call('optimize');
 	}
@@ -67,7 +67,7 @@ class SireCmd extends Command {
 	protected function getArguments()
 	{
 		return array(
-			array('yaml', InputArgument::REQUIRED, 'The location of the yaml file describing your model.'),
+			array('yaml', InputArgument::REQUIRED, 'The location of the yaml file describing your models.'),
 		);
 	}
 

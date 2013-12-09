@@ -84,6 +84,15 @@ class Sire {
 		return $this;
 	}
 
+	public function remove()
+	{
+		$this->controllerGenerator->reset($this);
+		$this->migrationGenerator->reset($this);
+		$this->modelGenerator->reset($this);
+		$this->seedGenerator->reset($this);
+		$this->viewGenerator->reset($this);
+	}
+
 	public function cmd($command)
 	{
 		$this->command = $command;

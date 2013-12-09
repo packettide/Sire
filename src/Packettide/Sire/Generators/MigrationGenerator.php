@@ -21,6 +21,8 @@ class MigrationGenerator {
 		$tempFields = $sire->assocToNumeric($sire->fields);
 		$fields = array();
 
+		$path = app_path() . '/database/migrations/';
+
 		foreach ($tempFields as $field)
 		{
 			$temp = $field;
@@ -36,6 +38,20 @@ class MigrationGenerator {
 			}
 		}
 
+		$this->reset($sire);
+
+		$name = date('Y_m_d_His') . '_create_' . $sire->name->plural() . '_table.php';
+
+		$toTemplate = array(
+			"tableName" => $sire->name->plural(),
+			"fields" => $fields,
+		);
+
+		$sire->templater->template($this->migrationTemplate, $toTemplate, $path.$name);
+	}
+
+	public function reset($sire)
+	{
 		$path = app_path() . '/database/migrations/';
 
 		// @max - any reason for $finder to be set as class var here? is state used somewhere else?
@@ -51,7 +67,7 @@ class MigrationGenerator {
 
 				if ($this->migrator->repositoryExists() && in_array($migrationName[0], $this->migrator->getRepository()->getRan()))
 				{
-					if ($sire->command->confirm("This is will down {$migrationName[0]}. Do you wish to continue? [yes|no]"))
+					if ($sire->command->option('sketchy') || $sire->command->confirm("This is will down {$migrationName[0]}. Do you wish to continue? [yes|no]"))
 					{
 						$mig = (object) array('migration' => $migrationName[0], 'batch' => 1);
 						$method = new \ReflectionMethod($this->migrator, 'runDown');
@@ -65,18 +81,12 @@ class MigrationGenerator {
 					}
 				}
 
-				unlink($path.$file->getRelativePathname());
+				if (is_file($path.$file->getRelativePathname()))
+				{
+					unlink($path.$file->getRelativePathname());
+				}
 			}
 		}
-
-		$name = date('Y_m_d_His') . '_create_' . $sire->name->plural() . '_table.php';
-
-		$toTemplate = array(
-			"tableName" => $sire->name->plural(),
-			"fields" => $fields,
-		);
-
-		$sire->templater->template($this->migrationTemplate, $toTemplate, $path.$name);
 	}
 
 }

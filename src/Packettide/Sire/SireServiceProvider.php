@@ -89,8 +89,14 @@ class SireServiceProvider extends ServiceProvider {
             return new SireCmd($app['sire']);
         });
 
+        $this->app['sire.cmd.reset'] = $this->app->share(function($app)
+        {
+            return new SireReset($app['sire']);
+        });
+
         $this->commands(
-            'sire.cmd'
+            'sire.cmd',
+            'sire.cmd.reset'
         );
     }
 

@@ -52,4 +52,14 @@ class SeedGenerator {
         }
 	}
 
+	public function reset($sire)
+	{
+		$path = app_path() . '/database/seeds/';
+		$name = $sire->name->pluralUpper().'TableSeeder.php';
+		if (is_file($path.$name))
+		{
+			unlink($path.$name);
+		}
+	}
+
 }

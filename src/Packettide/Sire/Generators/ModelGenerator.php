@@ -61,4 +61,13 @@ class ModelGenerator {
 		$sire->templater->template($this->modelTemplate, $toTemplate, $path.$name);
 	}
 
+	public function reset($sire)
+	{
+		$path = app_path() . '/models/' . $sire->name->upper() . '.php';
+		if (is_file($path))
+		{
+			unlink($path);
+		}
+	}
+
 }

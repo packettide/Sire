@@ -21,4 +21,15 @@ class ControllerGenerator {
 		$sire->templater->template($this->controllerTemplate, $toTemplate, $path.$name);
 	}
 
+	public function reset($sire)
+	{
+		$path = app_path() . '/controllers/';
+		$name = $sire->name->pluralUpper().'Controller.php';
+
+		if (is_file($path.$name))
+		{
+			unlink($path.$name);
+		}
+	}
+
 }

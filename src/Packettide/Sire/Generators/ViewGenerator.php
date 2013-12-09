@@ -62,4 +62,17 @@ class ViewGenerator
 		$sire->templater->template($this->viewTemplates['layout.blade.php'], $toTemplate, $layoutPath .$sire->viewTheme.'.blade.php');
 	}
 
+	public function reset($sire)
+	{
+		$path = app_path() . '/views/'.$sire->name->plural().'/';
+
+		$names = array('create.blade.php', 'edit.blade.php', 'index.blade.php');
+		foreach ($names as $name) {
+			if (is_file($path.$name))
+			{
+				unlink($path.$name);
+			}
+		}
+	}
+
 }
