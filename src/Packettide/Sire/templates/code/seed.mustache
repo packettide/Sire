@@ -9,7 +9,7 @@ class {{ Names }}TableSeeder extends Seeder {
 
 		$toInsert = array(
 		{{# seeds }}
-			array({{# fields }}{{ _name }} => {{{ _value }}}, {{/ fields }}),
+			array({{# fields }}'{{ _name }}' => {{{ _value }}}, {{/ fields }}),
 		{{/ seeds }}
 		);
 
