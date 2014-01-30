@@ -10,7 +10,7 @@
     ],
     "require": {
         "php": ">=5.3.0",
-        "mustache/mustache": "dev-master",
+        "mustache/mustache": "dev-dev",
         "symfony/yaml": "v2.3.5",
         "symfony/finder": "v2.3.5",
         "packettide/bree": "@dev"
