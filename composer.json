@@ -17,9 +17,9 @@
     },
     "require-dev": {
         "mockery/mockery": "dev-master",
-        "illuminate/support": "~4",
-        "illuminate/console": "~4",
-        "illuminate/filesystem": "~4"
+        "illuminate/support": "4.1.*",
+        "illuminate/console": "4.1.*",
+        "illuminate/filesystem": "4.1.*"
     },
     "autoload": {
         "psr-0": {

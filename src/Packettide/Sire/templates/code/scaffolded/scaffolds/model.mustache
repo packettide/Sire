@@ -1,0 +1,24 @@
+<?php
+
+abstract class {{ Name }}Scaffold extends Eloquent {
+	protected $guarded = array();
+
+	public static $rules = array(
+	{{# rules }}
+		"{{ _name }}" => "{{ rules }}",
+	{{/ rules }}
+		);
+
+	public $breeFields = array(
+	{{# breeFields  }}
+		'{{ _name }}'  => array('type' => '{{ fieldType }}', 'label' => '{{ label }}', {{{ breeAttrs }}}),
+	{{/ breeFields }}
+	);
+{{#relationships}}
+
+	public function {{ _name }}()
+	{
+	    return $this->{{ type }}('{{ model }}');
+	}
+{{/relationships}}
+}

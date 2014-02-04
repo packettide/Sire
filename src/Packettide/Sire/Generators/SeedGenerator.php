@@ -4,7 +4,11 @@ class SeedGenerator {
 
 	public function __construct()
 	{
-		$this->controllerTemplate = file_get_contents(__DIR__.'/../templates/code/seed.mustache');
+	}
+
+	public function setupTemplates($sire)
+	{
+		$this->seedTemplate =file_get_contents(__DIR__.'/../templates/code/'.$sire->codeTheme.'/seed.mustache');
 	}
 
 	/**
@@ -32,7 +36,7 @@ class SeedGenerator {
 
 		$this->updateBaseSeeder($sire);
 
-		$sire->templater->template($this->controllerTemplate, $toTemplate, $path.$name);
+		$sire->templater->template($this->seedTemplate, $toTemplate, $path.$name);
 	}
 
 	// Based on code from the Jeffery Way project

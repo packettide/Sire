@@ -5,11 +5,17 @@ use Illuminate\Database\Migrations\Migrator;
 
 class MigrationGenerator {
 
+	private $templates = array();
+
 	public function __construct(Finder $finder, Migrator $migrator)
 	{
 		$this->finder = $finder;
 		$this->migrator = $migrator;
-		$this->migrationTemplate = file_get_contents(__DIR__.'/../templates/code/migration.mustache');
+	}
+
+	public function setupTemplates($sire)
+	{
+		$this->migrationTemplate = file_get_contents(__DIR__.'/../templates/code/'.$sire->codeTheme.'/migration.mustache');
 	}
 
 	/**

@@ -29,6 +29,12 @@ class Sire {
 	public $viewTheme;
 
 	/**
+	 * Code theme that should be used
+	 * @var  String
+	 */
+	public $codeTheme;
+
+	/**
 	 * What can we generate, and the name of the functions that 
 	 * we should call instead if any.
 	 * @var  array
@@ -81,6 +87,10 @@ class Sire {
 		$this->getYaml($yamlFileLocation);
 		$this->setupNames();
 		$this->viewGenerator->setupTemplates($this);
+		$this->modelGenerator->setupTemplates($this);
+		$this->controllerGenerator->setupTemplates($this);
+		$this->seedGenerator->setupTemplates($this);
+		$this->migrationGenerator->setupTemplates($this);
 		return $this;
 	}
 

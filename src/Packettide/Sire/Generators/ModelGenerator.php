@@ -2,9 +2,22 @@
 
 class ModelGenerator {
 
+	private $templates = array();
+
+	private $safe = array();
+
 	public function __construct()
 	{
-		$this->modelTemplate = file_get_contents(__DIR__.'/../templates/code/model.mustache');
+	}
+
+	public function setupTemplates($sire)
+	{
+		$this->templates[$sire->name->upper().'.php'] = file_get_contents(__DIR__.'/../templates/code/'.$sire->codeTheme.'/model.mustache');
+
+		$this->safe[$sire->name->upper().'.php'] = true;
+
+		if(is_file(__DIR__.'/../templates/code/'.$sire->codeTheme.'/scaffolds/model.mustache'))
+			$this->templates['scaffolds/'.$sire->name->upper().'Scaffold.php'] = file_get_contents(__DIR__.'/../templates/code/'.$sire->codeTheme.'/scaffolds/model.mustache');
 	}
 
 	/**
@@ -50,7 +63,6 @@ class ModelGenerator {
 		$fields = $sire->assocToNumeric($fields);
 
 		$path = app_path() . '/models/';
-		$name = $sire->name->upper().'.php';
 
 		$toTemplate = array(
 			"rules" => $sire->getRules(),
@@ -58,7 +70,11 @@ class ModelGenerator {
 			"breeFields" => $fields,
 		);
 
-		$sire->templater->template($this->modelTemplate, $toTemplate, $path.$name);
+		foreach ($this->templates as $name => $template) {
+			if (!$this->safe[$sire->name->upper().'.php'] || !is_file($path.$name))
+				$sire->templater->template($template, $toTemplate, $path.$name);
+		}
+
 	}
 
 	public function reset($sire)

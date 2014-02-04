@@ -1,0 +1,20 @@
+<?php
+
+class {{ Names }}TableSeeder extends Seeder {
+
+	public function run()
+	{
+		// Uncomment the below to wipe the table clean before populating
+		DB::table('{{ names }}')->truncate();
+
+		$toInsert = array(
+		{{# seeds }}
+			array({{# fields }}'{{ _name }}' => {{{ _value }}}, {{/ fields }}),
+		{{/ seeds }}
+		);
+
+		// Uncomment the below to run the seeder
+		DB::table('{{ names }}')->insert($toInsert);
+	}
+
+}

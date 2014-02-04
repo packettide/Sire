@@ -1,0 +1,154 @@
+<?php
+
+abstract class ScaffoldController extends BaseController {
+
+	protected $modelName;
+	protected $class;
+
+	protected $repositories;
+
+	public function __construct()
+	{
+		$this->repositories[$this->modelName] = App::make($this->class);
+	}
+
+	/**
+	 * Display a listing of the resource.
+	 *
+	 * @return Response
+	 */
+	public function index()
+	{
+		$listing = $this->repositories[$this->modelName]->all();
+
+		return View::make($this->modelName.'s.index', array($this->modelName.'s' => $listing));
+	}
+
+	/**
+	 * Show the form for creating a new resource.
+	 *
+	 * @return Response
+	 */
+	public function create()
+	{
+		$admin = new Bree($this->class, array());
+
+		$data = array (
+			"admin" => $admin
+		);
+
+		return View::make($this->modelName.'s.create', $data);
+	}
+
+	/**
+	 * Store a newly created resource in storage.
+	 *
+	 * @return Response
+	 */
+	public function store()
+	{
+		$input = array_except(Input::all(), '_token');
+		$validation = Validator::make($input, Thingone::$rules);
+
+		if ($validation->passes())
+		{
+			$admin  = new Bree($this->class);
+
+			foreach ($input as $key => $value) {
+				if ($key != '_token')
+					$admin->$key = $value;
+			}
+
+			$admin->save();
+
+			return Redirect::route($this->modelName.'s.index');
+		}
+
+		return Redirect::route($this->modelName.'s.create')
+			->withInput()
+			->withErrors($validation)
+			->with('message', 'There were validation errors.');
+	}
+
+	/**
+	 * Display the specified resource.
+	 *
+	 * @param  int  $id
+	 * @return Response
+	 */
+	public function show($id)
+	{
+		$resource = $this->repositories[$this->modelName]->findOrFail($id);
+
+		return View::make($this->modelName.'s.show', array($this->modelName.'s' => $resource));
+	}
+
+	/**
+	 * Show the form for editing the specified resource.
+	 *
+	 * @param  int  $id
+	 * @return Response
+	 */
+	public function edit($id)
+	{
+		$admin = new Bree($this->class, array());
+
+		$admin->find($id);
+
+		$data = array (
+			"admin" => $admin
+		);
+
+		if (is_null($admin->baseModel))
+		{
+			return Redirect::route($this->modelName.'s.index');
+		}
+
+		return View::make($this->modelName.'s.edit', $data);
+	}
+
+	/**
+	 * Update the specified resource in storage.
+	 *
+	 * @param  int  $id
+	 * @return Response
+	 */
+	public function update($id)
+	{
+		$input = array_except(Input::all(), '_method');
+		$validation = Validator::make($input, Thingone::$rules);
+
+		if ($validation->passes())
+		{
+			$admin = new Bree($this->repositories[$this->modelName]->find($id));
+			
+			foreach ($input as $key => $value) {
+				if ($key != '_token')
+					$admin->$key = $value;
+			}
+
+			$admin->save();
+
+			return Redirect::route($this->modelName.'s.index');
+		}
+
+		return Redirect::route($this->modelName.'s.edit', $id)
+			->withInput()
+			->withErrors($validation)
+			->with('message', 'There were validation errors.');
+	}
+
+	/**
+	 * Remove the specified resource from storage.
+	 *
+	 * @param  int  $id
+	 * @return Response
+	 */
+	public function destroy($id)
+	{
+		$this->repositories[$this->modelName]->find($id)->delete();
+
+		return Redirect::route($this->modelName.'s.index');
+	}
+
+}
