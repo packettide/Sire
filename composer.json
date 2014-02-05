@@ -13,7 +13,7 @@
         "mustache/mustache": "dev-master",
         "symfony/yaml": "2.*",
         "symfony/finder": "2.*",
-        "packettide/bree": "1.*"
+        "packettide/bree": "dev-master"
     },
     "require-dev": {
         "mockery/mockery": "dev-master",
